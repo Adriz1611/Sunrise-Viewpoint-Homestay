@@ -29,7 +29,9 @@ npm run lint
 npm run build
 ```
 
-Both must pass clean. There's no test suite — the build (which type-checks) and lint are the only automated signal, so don't skip either.
+Both must pass clean. There's no unit test suite — the build (which type-checks) and lint are the only automated signal, so don't skip either.
+
+For layout/CSS changes, also run `npm run dev` plus `npm run check:responsive` (`scripts/responsive-check.mjs`, needs Playwright — already a devDependency) before calling it done. It screenshots the site at desktop/laptop/tablet/mobile breakpoints and flags horizontal overflow, wrapped nav links, and footer text overlap — the three bug classes this project has actually hit. There is no other visual-preview tooling wired into this environment; don't go looking for or trying to install a "preview MCP" — this script is the substitute.
 
 ## Design language
 

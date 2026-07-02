@@ -5,11 +5,18 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden px-5 pb-36 pt-24 sm:px-8 sm:pb-20 sm:pt-32">
-      {/* Oversized backdrop word */}
+    <footer className="relative overflow-hidden px-5 pb-32 pt-24 sm:px-8 sm:pb-48 sm:pt-32">
+      {/*
+        Oversized backdrop word. Font size is fluid but CAPPED via clamp() at
+        9rem (144px) — critical, because "bottom" offset + fixed padding only
+        stays overlap-free if the glyph height has a hard ceiling. An
+        uncapped vw value (e.g. 22vw) keeps growing on wider screens (422px
+        tall at 1920px!) with nothing to stop it colliding with the content
+        above, no matter how much padding you add for one breakpoint.
+      */}
       <p
         aria-hidden
-        className="text-outline pointer-events-none absolute -bottom-10 left-1/2 w-max -translate-x-1/2 select-none font-display text-[16vw] leading-none tracking-tight sm:-bottom-6 sm:text-[22vw]"
+        className="text-outline pointer-events-none absolute -bottom-2 left-1/2 w-max -translate-x-1/2 select-none font-display text-[clamp(2.5rem,14vw,9rem)] leading-none tracking-tight"
       >
         Aahaldara
       </p>

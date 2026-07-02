@@ -42,12 +42,12 @@ export default function Nav() {
         </a>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-7 lg:flex">
+        <ul className="hidden items-center gap-7 xl:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                className="group text-sm text-cream-dim transition-colors hover:text-cream"
+                className="group whitespace-nowrap text-sm text-cream-dim transition-colors hover:text-cream"
               >
                 <span className="font-numeric mr-1.5 text-[0.65rem] text-ember">
                   {link.index}
@@ -60,7 +60,7 @@ export default function Nav() {
 
         <a
           href={CONTACT.phones[0].href}
-          className="font-numeric hidden rounded-full border keyline px-4 py-2 text-sm text-cream transition-colors hover:border-ember hover:text-amber lg:block"
+          className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-colors hover:border-ember hover:text-amber xl:block"
         >
           {CONTACT.phones[0].number}
         </a>
@@ -71,7 +71,7 @@ export default function Nav() {
           aria-expanded={open}
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen(!open)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 lg:hidden"
+          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 xl:hidden"
         >
           <span
             className={`h-px w-6 bg-cream transition-transform duration-300 ${
@@ -88,7 +88,7 @@ export default function Nav() {
 
       {/* Mobile overlay menu */}
       <div
-        className={`fixed inset-0 top-[69px] z-40 bg-ink transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 top-[69px] z-40 bg-ink transition-opacity duration-300 xl:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
