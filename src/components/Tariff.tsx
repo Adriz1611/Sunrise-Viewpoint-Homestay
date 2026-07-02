@@ -1,6 +1,13 @@
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { CONTACT, TARIFF, TARIFF_NOTES } from "@/lib/site";
+import {
+  CONTACT,
+  MEALS_EXTRA,
+  MEALS_INCLUDED,
+  STAY_INFO,
+  TARIFF,
+  TARIFF_NOTES,
+} from "@/lib/site";
 
 export default function Tariff() {
   return (
@@ -26,9 +33,11 @@ export default function Tariff() {
                       <h3 className="font-display text-xl text-cream sm:text-2xl">
                         {item.name}
                       </h3>
-                      <p className="mt-1 text-xs uppercase tracking-[0.15em] text-cream-dim">
-                        {item.includes}
-                      </p>
+                      {item.note && (
+                        <p className="mt-1 text-xs uppercase tracking-[0.15em] text-cream-dim">
+                          {item.note}
+                        </p>
+                      )}
                     </div>
                     <p className="text-right">
                       <span className="font-numeric text-3xl text-amber sm:text-4xl">
@@ -43,7 +52,42 @@ export default function Tariff() {
               ))}
             </ul>
 
-            <Reveal as="ul" delay={200} className="mt-8 space-y-2.5">
+            <Reveal delay={160} className="mt-8 grid gap-6 sm:grid-cols-2">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
+                  Included in every stay
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {MEALS_INCLUDED.map((meal) => (
+                    <li
+                      key={meal}
+                      className="flex items-center gap-3 text-sm text-cream-dim"
+                    >
+                      <span aria-hidden className="h-1 w-1 rounded-full bg-ember" />
+                      {meal}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
+                  Available on request, extra cost
+                </p>
+                <ul className="mt-3 space-y-2">
+                  {MEALS_EXTRA.map((meal) => (
+                    <li
+                      key={meal}
+                      className="flex items-center gap-3 text-sm text-cream-dim"
+                    >
+                      <span aria-hidden className="h-1 w-1 rounded-full bg-cream-dim" />
+                      {meal}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+
+            <Reveal as="ul" delay={220} className="mt-8 space-y-2.5">
               {TARIFF_NOTES.map((note) => (
                 <li
                   key={note}
@@ -68,8 +112,9 @@ export default function Tariff() {
                   your sunrise.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-cream-dim">
-                  We answer between 7 a.m. and 9 p.m. — and yes, WhatsApp
-                  photos of the morning view are free.
+                  Check-in from {STAY_INFO.checkIn}, check-out by{" "}
+                  {STAY_INFO.checkOut}. Call ahead for exact availability and
+                  current rates.
                 </p>
               </div>
 
@@ -88,17 +133,6 @@ export default function Tariff() {
                     </span>
                   </a>
                 ))}
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="group block border-t keyline pt-4"
-                >
-                  <span className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-                    Email
-                  </span>
-                  <span className="mt-1 block text-lg text-cream transition-colors group-hover:text-amber">
-                    {CONTACT.email}
-                  </span>
-                </a>
               </div>
             </div>
           </Reveal>

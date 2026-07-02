@@ -8,6 +8,7 @@ import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
 import Rooms from "@/components/Rooms";
 import Tariff from "@/components/Tariff";
+import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   return (
@@ -21,6 +22,7 @@ export default function Home() {
         <Experiences />
         <Gallery />
         <Tariff />
+        <Testimonials />
         <GettingHere />
       </main>
       <Footer />

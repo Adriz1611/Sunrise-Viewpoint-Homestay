@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { ROOMS } from "@/lib/site";
+import { ACCOMMODATIONS } from "@/lib/site";
 
 export default function Rooms() {
   return (
@@ -12,14 +12,14 @@ export default function Rooms() {
           label="Rooms"
           title={
             <>
-              Three rooms. Every one of them{" "}
+              Eight rooms and camping tents. Every one of them{" "}
               <em className="text-amber">faces the light</em>.
             </>
           }
         />
 
         <div className="space-y-16 sm:space-y-24">
-          {ROOMS.map((room, i) => (
+          {ACCOMMODATIONS.map((room, i) => (
             <Reveal
               key={room.name}
               as="article"
@@ -44,6 +44,9 @@ export default function Rooms() {
                 <h3 className="font-display text-3xl tracking-tight text-cream sm:text-4xl">
                   {room.name}
                 </h3>
+                <p className="mt-1.5 text-xs uppercase tracking-[0.2em] text-cream-dim">
+                  {room.count}
+                </p>
                 <p className="mt-4 text-base leading-relaxed text-cream-dim sm:text-lg">
                   {room.tagline}
                 </p>
@@ -59,7 +62,7 @@ export default function Rooms() {
                   ))}
                 </ul>
                 <p className="font-numeric mt-6 text-xs uppercase tracking-[0.2em] text-cream-dim">
-                  Sleeps {room.sleeps}
+                  Occupancy: {room.occupancy}
                 </p>
               </div>
             </Reveal>

@@ -18,6 +18,8 @@
   --color-dawn: #ffd9a0;
 
   --animate-marquee: marquee 32s linear infinite;
+  --animate-rise: rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-settle: settle 2.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 
   @keyframes marquee {
     from {
@@ -25,6 +27,24 @@
     }
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      transform: translateY(115%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes settle {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
     }
   }
 }
@@ -76,9 +96,31 @@ body {
     transform: none;
     transition: none;
   }
-  .animate-marquee {
+  .animate-marquee,
+  .animate-rise,
+  .animate-settle {
     animation: none;
   }
+}
+
+/* Staggered word reveal for headlines: an overflow-hidden mask around each
+   rising word. Slight vertical padding keeps descenders from clipping. */
+.mask-line {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+/* Filmic grain overlay (hero) */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
 }
 
 /* Hairline keylines used across sections */

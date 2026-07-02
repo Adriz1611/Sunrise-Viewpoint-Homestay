@@ -1,10 +1,10 @@
 const ITEMS = [
   "180° sunrise over Kanchenjunga",
-  "Nepali family kitchen",
+  "Home-cooked in our tea garden",
   "Orange orchards of Sittong",
   "Hornbills of Latpanchar",
-  "River of cloud in the Teesta valley",
-  "Bonfire evenings",
+  "Teesta river far below",
+  "Nights built for stargazing",
 ];
 
 export default function Marquee() {

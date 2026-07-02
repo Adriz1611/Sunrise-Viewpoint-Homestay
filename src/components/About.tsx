@@ -4,9 +4,9 @@ import SectionHeading from "@/components/SectionHeading";
 import { META } from "@/lib/site";
 
 const STATS = [
-  { value: "5,000", unit: "ft above the plains" },
-  { value: "180°", unit: "of unbroken dawn" },
-  { value: "3", unit: "rooms, one family table" },
+  { value: "8", unit: "rooms across the tea garden" },
+  { value: "180°", unit: "of Kanchenjunga at dawn" },
+  { value: "~10", unit: "years welcoming guests" },
 ];
 
 export default function About() {
@@ -18,8 +18,8 @@ export default function About() {
           label="The Homestay"
           title={
             <>
-              Built on the ridge our family has farmed for{" "}
-              <em className="text-amber">three generations</em>.
+              Built by the Chamling family, on a ridge they turned from{" "}
+              <em className="text-amber">barren to blooming</em>.
             </>
           }
         />
@@ -38,17 +38,18 @@ export default function About() {
           <div className="flex flex-col justify-between gap-12">
             <div className="space-y-6 text-lg leading-relaxed text-cream-dim">
               <Reveal as="p">
-                Aahaldara is the kind of place people used to drive past on the
-                way to Darjeeling — until they saw what the sky does here at
-                5 a.m. Our homestay sits right on the viewpoint ridge, so the
-                sunrise isn&apos;t an excursion. It&apos;s the view from your
-                pillow.
+                Locally known as Chamling Homestay, Sunrise Viewpoint sits on a
+                ridge in Aahal Dara, Sittong III — land that was once barren,
+                nurtured over years into the tea garden you&apos;ll wake up in
+                today. It&apos;s the kind of place people used to drive past on
+                the way to Darjeeling, until they saw what the sky does here
+                at dawn.
               </Reveal>
               <Reveal as="p" delay={100}>
-                We keep it small on purpose: three rooms, food from our own
-                kitchen and garden, and evenings that end around a fire rather
-                than a television. You&apos;ll leave knowing our names, and
-                we&apos;ll remember yours.
+                Harkaram and Saru Chamling run it with their three daughters —
+                Rakhee, Neeta and S. Chamling — on a simple philosophy: treat
+                every guest like family. Nearly a decade in, every meal is
+                still cooked fresh, every smile still genuine.
               </Reveal>
             </div>
 

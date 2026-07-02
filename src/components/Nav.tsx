@@ -25,9 +25,11 @@ export default function Nav() {
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-colors duration-500 ${
-        scrolled && !open
-          ? "border-b keyline bg-ink/80 backdrop-blur-md"
-          : "border-b border-transparent"
+        open
+          ? "border-b keyline bg-ink"
+          : scrolled
+            ? "border-b keyline bg-ink/80 backdrop-blur-md"
+            : "border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8">
@@ -90,7 +92,7 @@ export default function Nav() {
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
-        <ul className="flex h-full flex-col justify-center gap-2 px-8 pb-24">
+        <ul className="flex h-full flex-col justify-center gap-2 overflow-y-auto px-8 pb-24">
           {NAV_LINKS.map((link, i) => (
             <li key={link.id}>
               <a

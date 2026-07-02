@@ -1,20 +1,25 @@
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { MAP_DIRECTIONS_URL, MAP_EMBED_SRC, ROUTES } from "@/lib/site";
+import {
+  MAP_DIRECTIONS_URL,
+  MAP_EMBED_SRC,
+  ROUTES,
+  TRANSPORT_CONTACT,
+} from "@/lib/site";
 
 export default function GettingHere() {
   return (
     <section
       id="getting-here"
-      className="scroll-mt-24 bg-ink-soft px-5 py-24 sm:px-8 sm:py-32"
+      className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32"
     >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
-          index="06"
+          index="07"
           label="Getting Here"
           title={
             <>
-              Two hours from the plains,{" "}
+              Under three hours from the plains,{" "}
               <em className="text-amber">a world above them</em>.
             </>
           }
@@ -45,11 +50,33 @@ export default function GettingHere() {
 
             <Reveal delay={300} className="mt-8 space-y-6">
               <p className="text-sm leading-relaxed text-cream-dim">
-                The last stretch from Kalijhora climbs through cinchona and
-                pine — narrow, beautiful, and best driven before dark. Tell us
-                your train or flight and we&apos;ll arrange a trusted local
-                pickup.
+                The last stretch climbs narrow hill roads through Kurseong and
+                Latpanchar — beautiful, and best driven before dark. We
+                arrange pick-up and drop-off from Bagdogra Airport, NJP
+                Station, Siliguri, or any location by road, plus local
+                sightseeing and vehicle hire for your whole stay.
               </p>
+
+              <div className="rounded-xl border keyline bg-ink-soft px-5 py-5 sm:px-6">
+                <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
+                  Transport bookings
+                </p>
+                <p className="font-display mt-2 text-lg text-cream">
+                  {TRANSPORT_CONTACT.name}
+                </p>
+                <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t keyline pt-4">
+                  {TRANSPORT_CONTACT.phones.map((phone) => (
+                    <a
+                      key={phone.number}
+                      href={phone.href}
+                      className="font-numeric whitespace-nowrap text-base text-cream transition-colors hover:text-amber"
+                    >
+                      {phone.number}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
               <a
                 href={MAP_DIRECTIONS_URL}
                 target="_blank"

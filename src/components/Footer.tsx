@@ -1,15 +1,15 @@
 import Reveal from "@/components/Reveal";
-import { CONTACT, META } from "@/lib/site";
+import { CONTACT, GOOGLE_REVIEWS, META, TRANSPORT_CONTACT } from "@/lib/site";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden px-5 pb-10 pt-24 sm:px-8 sm:pt-32">
+    <footer className="relative overflow-hidden px-5 pb-36 pt-24 sm:px-8 sm:pb-20 sm:pt-32">
       {/* Oversized backdrop word */}
       <p
         aria-hidden
-        className="text-outline pointer-events-none absolute -bottom-6 left-1/2 w-max -translate-x-1/2 select-none font-display text-[22vw] leading-none tracking-tight"
+        className="text-outline pointer-events-none absolute -bottom-10 left-1/2 w-max -translate-x-1/2 select-none font-display text-[16vw] leading-none tracking-tight sm:-bottom-6 sm:text-[22vw]"
       >
         Aahaldara
       </p>
@@ -29,7 +29,7 @@ export default function Footer() {
         <div className="mt-14 grid gap-10 border-t keyline pt-10 sm:mt-20 md:grid-cols-3">
           <Reveal>
             <h3 className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-              Call or WhatsApp
+              Bookings
             </h3>
             <div className="mt-4 space-y-3">
               {CONTACT.phones.map((phone) => (
@@ -46,14 +46,20 @@ export default function Footer() {
 
           <Reveal delay={100}>
             <h3 className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-              Write
+              Transport & pickup
             </h3>
-            <a
-              href={`mailto:${CONTACT.email}`}
-              className="mt-4 block text-lg text-cream transition-colors hover:text-amber"
-            >
-              {CONTACT.email}
-            </a>
+            <p className="mt-4 text-sm text-cream-dim">{TRANSPORT_CONTACT.name}</p>
+            <div className="mt-2 space-y-1.5">
+              {TRANSPORT_CONTACT.phones.map((phone) => (
+                <a
+                  key={phone.number}
+                  href={phone.href}
+                  className="font-numeric block text-lg text-cream transition-colors hover:text-amber"
+                >
+                  {phone.number}
+                </a>
+              ))}
+            </div>
           </Reveal>
 
           <Reveal delay={200}>
@@ -66,6 +72,17 @@ export default function Footer() {
             <p className="font-numeric mt-3 text-xs tracking-[0.15em] text-cream-dim">
               {META.coordinates}
             </p>
+            <a
+              href={GOOGLE_REVIEWS.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-full border keyline px-4 py-2 text-xs text-cream transition-colors hover:border-ember hover:text-amber"
+            >
+              <span className="font-numeric text-amber">
+                {GOOGLE_REVIEWS.rating} ★
+              </span>
+              on Google · {GOOGLE_REVIEWS.count} reviews
+            </a>
           </Reveal>
         </div>
 

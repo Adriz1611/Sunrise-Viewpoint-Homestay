@@ -21,11 +21,12 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "Sunrise Viewpoint Homestay — Aahaldara, Darjeeling Hills",
   description:
-    "A family-run homestay on the Aahaldara ridge above the Teesta valley. Wake to a 180° sunrise over Kanchenjunga, eat from a Nepali kitchen, and walk the orange orchards of Sittong.",
+    "A family-run homestay on the Aahaldara ridge above the Teesta valley, also known as Chamling Homestay. Wake to a 180° sunrise over Kanchenjunga, eat home-cooked meals from our own kitchen and tea garden, and walk the orange orchards of Sittong.",
   keywords: [
     "Sunrise Viewpoint Homestay",
+    "Chamling Homestay",
     "Aahaldara",
-    "Ahaldara",
+    "Aahal Dara",
     "Sittong",
     "Latpanchar",
     "Darjeeling homestay",
@@ -34,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sunrise Viewpoint Homestay — Aahaldara",
     description:
-      "Wake to a 180° sunrise over Kanchenjunga and the Teesta valley, from a family-run homestay on the Aahaldara ridge.",
+      "Wake to a 180° sunrise over Kanchenjunga and the Teesta valley, from a family-run homestay on the Aahaldara ridge. Also known as Chamling Homestay.",
     type: "website",
     locale: "en_IN",
   },

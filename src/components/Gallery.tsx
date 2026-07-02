@@ -18,12 +18,10 @@ export default function Gallery() {
           }
         />
 
-        <div className="columns-2 gap-4 sm:gap-6 lg:columns-3 [&>*]:mb-4 sm:[&>*]:mb-6">
+        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
           {GALLERY.map((photo, i) => (
             <Reveal key={photo.src} delay={(i % 3) * 80}>
-              <figure
-                className={`group relative ${photo.ratio} overflow-hidden rounded-xl`}
-              >
+              <figure className="group relative aspect-[4/3] overflow-hidden rounded-xl">
                 <Image
                   src={photo.src}
                   alt={photo.alt}
