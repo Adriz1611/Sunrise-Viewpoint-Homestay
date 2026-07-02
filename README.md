@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sunrise Viewpoint Homestay — Aahaldara
 
-## Getting Started
+An editorial, single-page marketing site for a family-run homestay on the Aahaldara ridge (Darjeeling Hills), built with **Next.js 16 (App Router)** and **Tailwind CSS v4**.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 + React 19, TypeScript, Turbopack
+- Tailwind CSS v4 (`@theme` design tokens in `src/app/globals.css`)
+- `next/font` — Fraunces (display), Manrope (body), Space Grotesk (numerals / phone numbers, with tabular figures)
+- `next/image` with remote Unsplash placeholders
+- Zero animation libraries — scroll reveals use a small `IntersectionObserver` component (`src/components/Reveal.tsx`) and respect `prefers-reduced-motion`
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Editing content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All copy, rooms, tariffs, routes and contact details live in **`src/lib/site.ts`** — edit that one file to update the site.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> **Before going live**
+>
+> - Replace the placeholder phone numbers and email in `CONTACT` (`src/lib/site.ts`).
+> - Replace the Unsplash placeholder photos (rooms, gallery, hero) with real photographs of the homestay — swap the URLs in `src/lib/site.ts`, `src/components/Hero.tsx` and `src/components/About.tsx`. If you host photos locally in `public/`, you can remove `images.remotePatterns` from `next.config.ts`.
+> - Verify tariffs, distances and travel times in `TARIFF` and `ROUTES`.
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/            layout (fonts, metadata), page, global styles + theme tokens
+  components/     Nav, Hero, Marquee, About (01), Rooms (02), Experiences (03),
+                  Gallery (04), Tariff (05), GettingHere (06 + Google Maps embed),
+                  Footer, Reveal, SectionHeading
+  lib/site.ts     single source of truth for all content
+```

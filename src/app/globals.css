@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
+  --font-numeric: var(--font-space-grotesk);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {
+  /* Sunrise palette — warm ink, cream, ember */
+  --color-ink: #0e0c09;
+  --color-ink-soft: #171310;
+  --color-ink-line: #2b241d;
+  --color-cream: #f3ecdf;
+  --color-cream-dim: #b5aa97;
+  --color-ember: #ff7a2f;
+  --color-amber: #ffb25e;
+  --color-dawn: #ffd9a0;
+
+  --animate-marquee: marquee 32s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-ember);
+  color: var(--color-ink);
+}
+
+/* Numerals everywhere line up: coordinates, tariffs, phone numbers */
+.font-numeric {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Scroll-reveal system: elements start hidden, .is-inview animates them in.
+   Delay is staggered per element via --reveal-delay. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-inview {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* Hairline keylines used across sections */
+.keyline {
+  border-color: var(--color-ink-line);
+}
+
+/* Outlined display type for the oversized background words */
+.text-outline {
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-cream) 22%, transparent);
+  color: transparent;
+}
+
+/* The map matches the site's dark grade until hovered */
+.map-frame iframe {
+  filter: grayscale(1) contrast(1.05) brightness(0.9);
+  transition: filter 0.6s ease;
+}
+
+.map-frame:hover iframe,
+.map-frame:focus-within iframe {
+  filter: none;
 }
