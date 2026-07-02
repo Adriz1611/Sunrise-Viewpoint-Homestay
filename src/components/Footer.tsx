@@ -5,18 +5,26 @@ export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative overflow-hidden px-5 pb-32 pt-24 sm:px-8 sm:pb-48 sm:pt-32">
+    <footer className="relative overflow-hidden px-5 pb-28 pt-24 sm:px-8 sm:pb-64 sm:pt-32 lg:pb-72">
       {/*
         Oversized backdrop word. Font size is fluid but CAPPED via clamp() at
-        9rem (144px) — critical, because "bottom" offset + fixed padding only
-        stays overlap-free if the glyph height has a hard ceiling. An
-        uncapped vw value (e.g. 22vw) keeps growing on wider screens (422px
-        tall at 1920px!) with nothing to stop it colliding with the content
-        above, no matter how much padding you add for one breakpoint.
+        each breakpoint — critical, because "bottom" offset + fixed padding
+        only stays overlap-free if the glyph height has a hard ceiling. An
+        uncapped vw value keeps growing on wider screens with nothing to stop
+        it colliding with the content above. Mobile stays small/restrained
+        (matches the tighter padding above); sm+ gets the large dramatic
+        treatment, capped at 15rem so it never outgrows the bigger padding
+        reserved for it at those sizes.
+
+        The negative bottom offset lets the word bleed slightly past the
+        footer's own edge (clipped by overflow-hidden) for an editorial crop
+        effect — a fixed pixel amount is imperceptible against a 240px-tall
+        desktop glyph but crops off ~1/3 of a ~58px mobile glyph, reading as
+        broken rather than stylish. So no bleed on mobile; only sm+.
       */}
       <p
         aria-hidden
-        className="text-outline pointer-events-none absolute -bottom-2 left-1/2 w-max -translate-x-1/2 select-none font-display text-[clamp(2.5rem,14vw,9rem)] leading-none tracking-tight"
+        className="text-outline pointer-events-none absolute bottom-0 left-1/2 w-max -translate-x-1/2 select-none font-display text-[clamp(2.5rem,14vw,4.5rem)] leading-none tracking-tight sm:-bottom-4 sm:text-[clamp(6rem,20vw,15rem)]"
       >
         Aahaldara
       </p>

@@ -26,7 +26,6 @@ An editorial, single-page marketing site built for a real client — not a templ
 - [Editing content](#-editing-content)
 - [Content sources](#-content-sources)
 - [Images](#-images)
-- [Checking responsiveness](#-checking-responsiveness)
 - [Project structure](#-project-structure)
 
 ## Stack
@@ -39,7 +38,7 @@ An editorial, single-page marketing site built for a real client — not a templ
 | **Fonts** | Fraunces (display serif), Manrope (body), Space Grotesk (numerals) — via `next/font` |
 | **Images** | `next/image` — one local client photo (hero) + curated Unsplash stock elsewhere |
 | **Motion** | No animation library — a small `IntersectionObserver` component (`Reveal.tsx`), respects `prefers-reduced-motion` |
-| **Tests** | None (no test suite) — `npm run lint` + `npm run build` are the signal; `npm run check:responsive` for layout |
+| **Tests** | None (no test suite) — `npm run lint` + `npm run build` are the signal |
 
 ## 🚀 Getting started
 
@@ -100,15 +99,6 @@ One 2-star review was left out of this curated showcase — the full spread, cri
 > - Swap the stock room/About/gallery photos for the family's own photography whenever it's available.
 > - Confirm current tariff rates by phone — the sourced numbers can change seasonally.
 
-## 📱 Checking responsiveness
-
-```bash
-npm run dev                 # in one terminal
-npm run check:responsive    # in another — requires localhost:3000 running
-```
-
-Screenshots + a `results.json` land in `responsive-check-output/` (gitignored). It covers desktop (1920px, and 1536px — what a 1920px monitor renders at 125% OS scaling), laptop (1366px), tablet (portrait 768px and landscape 1024px), and mobile (390px, 360px), and flags horizontal overflow, wrapped nav links, and the footer's background-word text overlapping the content above it — the three classes of bug this project has actually hit. Extend `BREAKPOINTS` / `SECTIONS` in `scripts/responsive-check.mjs` if you add sections worth checking.
-
 ## 📁 Project structure
 
 ```
@@ -119,8 +109,6 @@ src/
                   GettingHere (07 + satellite Google Maps embed), Footer,
                   Reveal, SectionHeading
   lib/site.ts     single source of truth for all content
-scripts/
-  responsive-check.mjs   Playwright-based layout audit across breakpoints
 public/
   images/hero-kanchenjunga.jpg   the one real client photo on the site
 ```
