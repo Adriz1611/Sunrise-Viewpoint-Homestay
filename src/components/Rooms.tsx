@@ -1,73 +1,126 @@
+"use client";
+
 import Image from "next/image";
-import Reveal from "@/components/Reveal";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SectionHeading from "@/components/SectionHeading";
 import { ACCOMMODATIONS } from "@/lib/site";
 
+/**
+ * On desktop the section pins and the room panels travel horizontally,
+ * scrubbed to scroll — one full-bleed cinematic panel per accommodation.
+ * Below lg (and for reduced motion) it falls back to a vertical stack of
+ * the same panels with no pinning.
+ */
 export default function Rooms() {
+  const root = useRef<HTMLElement>(null);
+  const track = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px)", () => {
+        const t = track.current;
+        if (!t) return;
+        const distance = () => t.scrollWidth - window.innerWidth;
+
+        gsap.to(t, {
+          x: () => -distance(),
+          ease: "none",
+          scrollTrigger: {
+            trigger: root.current,
+            start: "top top",
+            end: () => `+=${distance()}`,
+            scrub: true,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+      });
+    },
+    { scope: root }
+  );
+
   return (
-    <section id="rooms" className="scroll-mt-24 bg-ink-soft px-5 py-24 sm:px-8 sm:py-32">
-      <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          index="02"
-          label="Rooms"
-          title={
-            <>
-              Eight rooms and camping tents. Every one of them{" "}
-              <em className="text-amber">faces the light</em>.
-            </>
-          }
-        />
+    <section
+      ref={root}
+      id="rooms"
+      className="scroll-mt-24 overflow-hidden bg-ink-soft py-24 sm:py-32 lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:py-0"
+    >
+      <div className="px-5 sm:px-8 lg:pt-28">
+        <div className="mx-auto max-w-7xl">
+          <SectionHeading
+            index="02"
+            label="Rooms"
+            title={
+              <>
+                Eight rooms and camping tents. Every one of them{" "}
+                <em className="text-celadon">faces the light</em>.
+              </>
+            }
+          />
+        </div>
+      </div>
 
-        <div className="space-y-16 sm:space-y-24">
-          {ACCOMMODATIONS.map((room, i) => (
-            <Reveal
-              key={room.name}
-              as="article"
-              className={`grid items-center gap-8 lg:grid-cols-12 lg:gap-14 ${
-                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
-              }`}
-            >
-              <div className="relative aspect-[16/11] overflow-hidden rounded-2xl lg:col-span-7">
-                <Image
-                  src={room.image}
-                  alt={room.imageAlt}
-                  fill
-                  sizes="(min-width: 1024px) 58vw, 100vw"
-                  className="object-cover transition-transform duration-700 hover:scale-105"
-                />
-              </div>
+      <div
+        ref={track}
+        className="flex flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:flex-nowrap lg:items-stretch lg:pb-20 lg:pr-[14vw]"
+      >
+        {ACCOMMODATIONS.map((room, i) => (
+          <article
+            key={room.name}
+            className="relative overflow-hidden rounded-3xl border keyline bg-ink lg:h-[62vh] lg:w-[70vw] lg:shrink-0"
+          >
+            <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-auto lg:h-full">
+              <Image
+                src={room.image}
+                alt={room.imageAlt}
+                fill
+                sizes="(min-width: 1024px) 70vw, 100vw"
+                className="object-cover"
+              />
+              <div
+                aria-hidden
+                className="hidden sm:block absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/45 to-ink/10"
+              />
+            </div>
 
-              <div className="lg:col-span-5">
-                <p className="font-numeric mb-3 text-xs text-ember">
+            {/* Stacked below the photo on phones; overlaid on the photo from sm up */}
+            <div className="p-6 sm:absolute sm:inset-x-0 sm:bottom-0 sm:p-9 lg:p-12">
+              <div className="flex items-baseline justify-between">
+                <p className="font-numeric text-xs text-teal">
                   R–{String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="font-display text-3xl tracking-tight text-cream sm:text-4xl">
-                  {room.name}
-                </h3>
-                <p className="mt-1.5 text-xs uppercase tracking-[0.2em] text-cream-dim">
+                <p className="font-numeric text-xs uppercase tracking-[0.2em] text-cream-dim">
                   {room.count}
                 </p>
-                <p className="mt-4 text-base leading-relaxed text-cream-dim sm:text-lg">
-                  {room.tagline}
-                </p>
-                <ul className="mt-6 space-y-2.5 border-t keyline pt-6">
-                  {room.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-center gap-3 text-sm text-cream-dim"
-                    >
-                      <span aria-hidden className="h-1 w-1 rounded-full bg-ember" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                <p className="font-numeric mt-6 text-xs uppercase tracking-[0.2em] text-cream-dim">
-                  Occupancy: {room.occupancy}
-                </p>
               </div>
-            </Reveal>
-          ))}
-        </div>
+              <h3 className="font-display mt-3 text-3xl tracking-tight text-cream sm:text-5xl">
+                {room.name}
+              </h3>
+              <p className="mt-3 max-w-lg text-sm leading-relaxed text-cream-dim sm:text-base">
+                {room.tagline}
+              </p>
+              <ul className="mt-6 flex flex-wrap gap-2">
+                {room.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="rounded-full border border-cream/20 bg-ink/40 px-3.5 py-1.5 text-xs text-cream backdrop-blur-sm"
+                  >
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <p className="font-numeric mt-6 text-[0.65rem] uppercase tracking-[0.2em] text-cream-dim">
+                Occupancy: {room.occupancy}
+              </p>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );

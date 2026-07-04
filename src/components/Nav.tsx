@@ -38,7 +38,7 @@ export default function Nav() {
           className="font-display text-lg tracking-tight text-cream"
           onClick={() => setOpen(false)}
         >
-          Sunrise<span className="text-ember">.</span>
+          Sunrise<span className="text-teal">.</span>
         </a>
 
         {/* Desktop links */}
@@ -49,7 +49,7 @@ export default function Nav() {
                 href={`#${link.id}`}
                 className="group whitespace-nowrap text-sm text-cream-dim transition-colors hover:text-cream"
               >
-                <span className="font-numeric mr-1.5 text-[0.65rem] text-ember">
+                <span className="font-numeric mr-1.5 text-[0.65rem] text-teal">
                   {link.index}
                 </span>
                 {link.label}
@@ -60,7 +60,7 @@ export default function Nav() {
 
         <a
           href={CONTACT.phones[0].href}
-          className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-colors hover:border-ember hover:text-amber xl:block"
+          className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-colors hover:border-teal hover:text-celadon xl:block"
         >
           {CONTACT.phones[0].number}
         </a>
@@ -101,10 +101,10 @@ export default function Nav() {
                 className="group flex items-baseline gap-4 border-b keyline py-4"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
-                <span className="font-numeric text-xs text-ember">
+                <span className="font-numeric text-xs text-teal">
                   ({link.index})
                 </span>
-                <span className="font-display text-3xl text-cream transition-colors group-hover:text-amber">
+                <span className="font-display text-3xl text-cream transition-colors group-hover:text-celadon">
                   {link.label}
                 </span>
               </a>
@@ -113,7 +113,7 @@ export default function Nav() {
           <li className="mt-8">
             <a
               href={CONTACT.phones[0].href}
-              className="font-numeric text-xl text-amber"
+              className="font-numeric text-xl text-celadon"
             >
               {CONTACT.phones[0].number}
             </a>

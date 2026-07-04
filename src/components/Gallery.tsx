@@ -1,7 +1,21 @@
-import Image from "next/image";
-import Reveal from "@/components/Reveal";
+import ParallaxImage from "@/components/ParallaxImage";
 import SectionHeading from "@/components/SectionHeading";
 import { GALLERY } from "@/lib/site";
+
+/**
+ * Editorial mosaic: aligned rows with deliberately unequal column widths
+ * (7/5, then 4/4/4, then one full-bleed panorama), captions always visible
+ * bottom-left like gallery wall labels. Each photo keeps its own parallax
+ * rate so neighbouring frames drift out of step.
+ */
+const LAYOUT = [
+  { span: "sm:col-span-7", height: "h-[38vh] sm:h-[56vh]", speed: 6 },
+  { span: "sm:col-span-5", height: "h-[38vh] sm:h-[56vh]", speed: 10 },
+  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 8 },
+  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 12 },
+  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 7 },
+  { span: "sm:col-span-12", height: "h-[38vh] sm:h-[62vh]", speed: 9 },
+];
 
 export default function Gallery() {
   return (
@@ -13,28 +27,34 @@ export default function Gallery() {
           title={
             <>
               What the ridge looks like when{" "}
-              <em className="text-amber">nobody is posing</em>.
+              <em className="text-celadon">nobody is posing</em>.
             </>
           }
         />
 
-        <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-          {GALLERY.map((photo, i) => (
-            <Reveal key={photo.src} delay={(i % 3) * 80}>
-              <figure className="group relative aspect-[4/3] overflow-hidden rounded-xl">
-                <Image
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-12 sm:gap-4">
+          {GALLERY.map((photo, i) => {
+            const cell = LAYOUT[i % LAYOUT.length];
+            return (
+              <figure
+                key={photo.src}
+                className={`relative col-span-1 ${cell.span} ${cell.height}`}
+              >
+                <ParallaxImage
                   src={photo.src}
                   alt={photo.alt}
-                  fill
-                  sizes="(min-width: 1024px) 33vw, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(min-width: 640px) 60vw, 100vw"
+                  speed={cell.speed}
+                  className="h-full rounded-xl"
                 />
-                <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-ink/85 to-transparent p-4 pt-10 text-xs text-cream opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                  {photo.alt}
+                <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-xl bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12 sm:p-5">
+                  <span className="font-display text-lg tracking-tight text-cream sm:text-xl">
+                    {photo.alt}
+                  </span>
                 </figcaption>
               </figure>
-            </Reveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

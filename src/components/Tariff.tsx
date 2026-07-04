@@ -18,125 +18,120 @@ export default function Tariff() {
           label="Tariff & Booking"
           title={
             <>
-              Honest hill prices, <em className="text-amber">meals included</em>.
+              Honest hill prices, <em className="text-celadon">meals included</em>.
             </>
           }
         />
 
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-7">
-            <ul className="divide-y keyline border-y keyline">
-              {TARIFF.map((item, i) => (
-                <Reveal as="li" key={item.name} delay={i * 80}>
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-6">
-                    <div>
-                      <h3 className="font-display text-xl text-cream sm:text-2xl">
-                        {item.name}
-                      </h3>
-                      {item.note && (
-                        <p className="mt-1 text-xs uppercase tracking-[0.15em] text-cream-dim">
-                          {item.note}
-                        </p>
-                      )}
-                    </div>
-                    <p className="text-right">
-                      <span className="font-numeric text-3xl text-amber sm:text-4xl">
-                        {item.price}
-                      </span>
-                      <span className="block text-xs text-cream-dim">
-                        {item.unit}
-                      </span>
+        {/* Price board — full-width rows, menu style */}
+        <ul className="divide-y keyline border-y keyline">
+          {TARIFF.map((item, i) => (
+            <Reveal as="li" key={item.name} delay={i * 70}>
+              <div className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 py-7 transition-colors duration-300 hover:bg-ink-soft sm:px-4">
+                <span className="font-numeric text-xs text-teal">
+                  T–{String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-display text-2xl text-cream transition-colors duration-300 group-hover:text-celadon sm:text-3xl">
+                    {item.name}
+                  </h3>
+                  {item.note && (
+                    <p className="mt-1 text-xs uppercase tracking-[0.15em] text-cream-dim">
+                      {item.note}
                     </p>
-                  </div>
-                </Reveal>
-              ))}
-            </ul>
-
-            <Reveal delay={160} className="mt-8 grid gap-6 sm:grid-cols-2">
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-                  Included in every stay
+                  )}
+                </div>
+                <p className="text-right">
+                  <span className="font-numeric text-3xl text-celadon sm:text-5xl">
+                    {item.price}
+                  </span>
+                  <span className="block text-xs text-cream-dim">{item.unit}</span>
                 </p>
-                <ul className="mt-3 space-y-2">
-                  {MEALS_INCLUDED.map((meal) => (
-                    <li
-                      key={meal}
-                      className="flex items-center gap-3 text-sm text-cream-dim"
-                    >
-                      <span aria-hidden className="h-1 w-1 rounded-full bg-ember" />
-                      {meal}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-                  Available on request, extra cost
-                </p>
-                <ul className="mt-3 space-y-2">
-                  {MEALS_EXTRA.map((meal) => (
-                    <li
-                      key={meal}
-                      className="flex items-center gap-3 text-sm text-cream-dim"
-                    >
-                      <span aria-hidden className="h-1 w-1 rounded-full bg-cream-dim" />
-                      {meal}
-                    </li>
-                  ))}
-                </ul>
               </div>
             </Reveal>
+          ))}
+        </ul>
 
-            <Reveal as="ul" delay={220} className="mt-8 space-y-2.5">
-              {TARIFF_NOTES.map((note) => (
-                <li
-                  key={note}
-                  className="flex gap-3 text-sm leading-relaxed text-cream-dim"
-                >
-                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ember" />
-                  {note}
+        {/* What the tariff covers */}
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal>
+            <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
+              Included in every stay
+            </p>
+            <ul className="mt-3 space-y-2">
+              {MEALS_INCLUDED.map((meal) => (
+                <li key={meal} className="flex items-center gap-3 text-sm text-cream-dim">
+                  <span aria-hidden className="h-1 w-1 rounded-full bg-teal" />
+                  {meal}
                 </li>
               ))}
-            </Reveal>
-          </div>
+            </ul>
+          </Reveal>
+          <Reveal delay={80}>
+            <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
+              Available on request, extra cost
+            </p>
+            <ul className="mt-3 space-y-2">
+              {MEALS_EXTRA.map((meal) => (
+                <li key={meal} className="flex items-center gap-3 text-sm text-cream-dim">
+                  <span aria-hidden className="h-1 w-1 rounded-full bg-cream-dim" />
+                  {meal}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+          <Reveal as="ul" delay={160} className="space-y-2.5 sm:col-span-2 lg:col-span-1">
+            {TARIFF_NOTES.map((note) => (
+              <li key={note} className="flex gap-3 text-sm leading-relaxed text-cream-dim">
+                <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-teal" />
+                {note}
+              </li>
+            ))}
+          </Reveal>
+        </div>
 
-          <Reveal delay={150} className="lg:col-span-5">
-            <div className="flex h-full flex-col justify-between gap-10 rounded-2xl border keyline bg-ink-soft p-8 sm:p-10">
+        {/* Reserve band — wide, action-first */}
+        <Reveal delay={120} className="mt-14">
+          <div className="overflow-hidden rounded-3xl border keyline bg-ink-soft">
+            <div className="grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_auto]">
               <div>
-                <p className="font-numeric text-xs uppercase tracking-[0.25em] text-ember">
+                <p className="font-numeric text-xs uppercase tracking-[0.25em] text-teal">
                   Reserve
                 </p>
-                <h3 className="font-display mt-4 text-3xl leading-tight text-cream">
-                  One call holds
-                  <br />
-                  your sunrise.
+                <h3 className="font-display mt-4 text-3xl leading-tight text-cream sm:text-4xl">
+                  One call holds your sunrise.
                 </h3>
-                <p className="mt-4 text-sm leading-relaxed text-cream-dim">
-                  Check-in from {STAY_INFO.checkIn}, check-out by{" "}
-                  {STAY_INFO.checkOut}. Call ahead for exact availability and
-                  current rates.
-                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
+                    Check-in {STAY_INFO.checkIn}
+                  </span>
+                  <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
+                    Check-out {STAY_INFO.checkOut}
+                  </span>
+                  <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
+                    First light 05:30 IST
+                  </span>
+                </div>
               </div>
 
-              <div className="space-y-4">
-                {CONTACT.phones.map((phone) => (
+              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+                {CONTACT.phones.map((phone, i) => (
                   <a
                     key={phone.number}
                     href={phone.href}
-                    className="group block border-t keyline pt-4"
+                    className={`font-numeric whitespace-nowrap rounded-full px-8 py-4 text-center text-lg transition-colors duration-300 ${
+                      i === 0
+                        ? "bg-cream text-ink hover:bg-celadon"
+                        : "border keyline text-cream hover:border-teal hover:text-celadon"
+                    }`}
                   >
-                    <span className="text-xs uppercase tracking-[0.2em] text-cream-dim">
-                      {phone.label}
-                    </span>
-                    <span className="font-numeric mt-1 block whitespace-nowrap text-2xl text-cream transition-colors group-hover:text-amber sm:text-[1.65rem]">
-                      {phone.number}
-                    </span>
+                    {phone.number}
                   </a>
                 ))}
               </div>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

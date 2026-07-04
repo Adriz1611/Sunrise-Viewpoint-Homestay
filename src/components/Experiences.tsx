@@ -1,39 +1,107 @@
-import Reveal from "@/components/Reveal";
+"use client";
+
+import Image from "next/image";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SectionHeading from "@/components/SectionHeading";
 import { EXPERIENCES } from "@/lib/site";
 
+/**
+ * Stacked-deck scroll: each card pins below the nav while the next one
+ * slides up over it; the covered card recedes (scales down and dims) in
+ * scrub with the incoming card's travel. Sticky positioning does the
+ * pinning, GSAP does the recede — no pin-spacer juggling required.
+ */
 export default function Experiences() {
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      if (prefersReducedMotion()) return;
+
+      const cards = gsap.utils.toArray<HTMLElement>(".exp-card");
+      cards.forEach((card, i) => {
+        const next = cards[i + 1];
+        if (!next) return;
+        gsap.to(card, {
+          scale: 0.92,
+          opacity: 0.45,
+          transformOrigin: "center top",
+          ease: "none",
+          scrollTrigger: {
+            trigger: next,
+            start: "top bottom",
+            end: "top 18%",
+            scrub: true,
+          },
+        });
+      });
+    },
+    { scope: root }
+  );
+
   return (
-    <section id="experiences" className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32">
+    <section
+      ref={root}
+      id="experiences"
+      className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32"
+    >
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           index="03"
           label="Experiences"
           title={
             <>
-              The days write <em className="text-amber">themselves</em> up here.
+              The days write <em className="text-celadon">themselves</em> up here.
             </>
           }
         />
 
-        <div className="grid gap-px overflow-hidden rounded-2xl border keyline bg-ink-line sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-6 sm:space-y-8">
           {EXPERIENCES.map((exp, i) => (
-            <Reveal
+            <article
               key={exp.title}
-              as="article"
-              delay={(i % 3) * 90}
-              className="group relative bg-ink p-7 transition-colors duration-500 hover:bg-ink-soft sm:p-9"
+              className="exp-card sticky top-[14vh] overflow-hidden rounded-3xl border keyline bg-ink-soft sm:top-[16vh]"
+              style={{ zIndex: i + 1 }}
             >
-              <p className="font-numeric mb-8 text-xs text-ember">
-                ({exp.index})
-              </p>
-              <h3 className="font-display text-2xl tracking-tight text-cream transition-colors group-hover:text-amber">
-                {exp.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-cream-dim">
-                {exp.body}
-              </p>
-            </Reveal>
+              <div className="grid lg:grid-cols-2">
+                <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[440px]">
+                  <Image
+                    src={exp.image}
+                    alt={exp.imageAlt}
+                    fill
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 bg-gradient-to-t from-ink-soft/60 to-transparent lg:bg-gradient-to-r"
+                  />
+                </div>
+
+                <div className="flex flex-col justify-between gap-10 p-7 sm:p-10 lg:p-12">
+                  <div className="flex items-baseline justify-between">
+                    <p className="font-numeric text-sm text-teal">({exp.index})</p>
+                    <p className="font-numeric text-xs text-cream-dim">
+                      {String(i + 1).padStart(2, "0")} /{" "}
+                      {String(EXPERIENCES.length).padStart(2, "0")}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-display text-3xl leading-tight tracking-tight text-cream sm:text-4xl">
+                      {exp.title}
+                    </h3>
+                    <p className="mt-5 max-w-md text-base leading-relaxed text-cream-dim sm:text-lg">
+                      {exp.body}
+                    </p>
+                  </div>
+                  <p className="font-numeric text-[0.65rem] uppercase tracking-[0.25em] text-cream-dim">
+                    Aahaldara · Sittong III
+                  </p>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       </div>

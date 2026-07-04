@@ -1,4 +1,5 @@
-import Image from "next/image";
+import Counter from "@/components/Counter";
+import ParallaxImage from "@/components/ParallaxImage";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { META } from "@/lib/site";
@@ -19,21 +20,19 @@ export default function About() {
           title={
             <>
               Built by the Chamling family, on a ridge they turned from{" "}
-              <em className="text-amber">barren to blooming</em>.
+              <em className="text-celadon">barren to blooming</em>.
             </>
           }
         />
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <Reveal className="relative aspect-[4/5] overflow-hidden rounded-2xl lg:aspect-auto lg:min-h-[560px]">
-            <Image
-              src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1800&auto=format&fit=crop"
-              alt="First light breaking over the valley below the homestay"
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover transition-transform duration-700 hover:scale-105"
-            />
-          </Reveal>
+          <ParallaxImage
+            src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1800&auto=format&fit=crop"
+            alt="First light breaking over the valley below the homestay"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            speed={9}
+            className="aspect-[4/5] rounded-2xl lg:aspect-auto lg:min-h-[560px]"
+          />
 
           <div className="flex flex-col justify-between gap-12">
             <div className="space-y-6 text-lg leading-relaxed text-cream-dim">
@@ -58,9 +57,10 @@ export default function About() {
                 <Reveal key={stat.unit} delay={i * 100}>
                   <dt className="sr-only">{stat.unit}</dt>
                   <dd>
-                    <span className="font-numeric block text-3xl text-amber sm:text-4xl">
-                      {stat.value}
-                    </span>
+                    <Counter
+                      value={stat.value}
+                      className="font-numeric block text-3xl text-celadon sm:text-4xl"
+                    />
                     <span className="mt-1 block text-xs leading-snug text-cream-dim sm:text-sm">
                       {stat.unit}
                     </span>

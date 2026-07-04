@@ -5,7 +5,7 @@ import { GOOGLE_REVIEWS, TESTIMONIALS } from "@/lib/site";
 function Stars({ rating }: { rating: number }) {
   return (
     <p
-      className="font-numeric text-sm tracking-[0.25em] text-amber"
+      className="font-numeric text-sm tracking-[0.25em] text-celadon"
       aria-label={`Rated ${rating} out of 5 stars`}
     >
       {"★".repeat(rating)}
@@ -84,7 +84,7 @@ export default function Testimonials() {
           title={
             <>
               Don&apos;t take our word for it —{" "}
-              <em className="text-amber">take theirs</em>.
+              <em className="text-celadon">take theirs</em>.
             </>
           }
         />
@@ -94,7 +94,7 @@ export default function Testimonials() {
             <span className="font-numeric text-5xl text-cream sm:text-6xl">
               {GOOGLE_REVIEWS.rating}
             </span>
-            <span className="text-2xl text-amber" aria-hidden>
+            <span className="text-2xl text-celadon" aria-hidden>
               ★
             </span>
           </p>
@@ -110,7 +110,7 @@ export default function Testimonials() {
             href={GOOGLE_REVIEWS.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border keyline px-5 py-2.5 text-sm text-cream transition-colors hover:border-ember hover:text-amber"
+            className="rounded-full border keyline px-5 py-2.5 text-sm text-cream transition-colors hover:border-teal hover:text-celadon"
           >
             Read them all on Google ↗
           </a>

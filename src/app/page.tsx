@@ -7,12 +7,14 @@ import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
 import Rooms from "@/components/Rooms";
+import SmoothScroll from "@/components/SmoothScroll";
 import Tariff from "@/components/Tariff";
 import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   return (
     <>
+      <SmoothScroll />
       <Nav />
       <main>
         <Hero />

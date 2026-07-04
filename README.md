@@ -37,7 +37,7 @@ An editorial, single-page marketing site built for a real client — not a templ
 | **Styling** | Tailwind CSS v4 — design tokens as `@theme` in [`globals.css`](src/app/globals.css) |
 | **Fonts** | Fraunces (display serif), Manrope (body), Space Grotesk (numerals) — via `next/font` |
 | **Images** | `next/image` — one local client photo (hero) + curated Unsplash stock elsewhere |
-| **Motion** | No animation library — a small `IntersectionObserver` component (`Reveal.tsx`), respects `prefers-reduced-motion` |
+| **Motion** | GSAP (ScrollTrigger + SplitText) with Lenis smooth scrolling — cinematic scroll-driven reveals, parallax, and counters; fully disabled under `prefers-reduced-motion` |
 | **Tests** | None (no test suite) — `npm run lint` + `npm run build` are the signal |
 
 ## 🚀 Getting started
@@ -65,9 +65,9 @@ The whole site is one page, numbered 01–07 and threaded through the nav, mobil
 
 ## 🎨 Design language
 
-- **Palette** — dark "ink" background with cream, ember, and amber accents (Tailwind `@theme` tokens in `globals.css`).
+- **Palette** — strictly dark, on the client's four-colour system: Ink Black `#021C1B`, Muted Teal `#82C4A1`, Celadon `#AED9C2`, Honeydew `#D5EBE0`, plus derived tints of the same hue (Tailwind `@theme` tokens in `globals.css`).
 - **Type** — Fraunces for display headlines, Manrope for body copy, Space Grotesk with tabular figures (`.font-numeric`) for every number on the site: phone numbers, prices, coordinates, distances.
-- **Motion** — scroll-reveal fades via the `Reveal` component; marquees (top ticker + testimonials) render multiple duplicated copies of their content so the loop never runs dry on ultra-wide screens.
+- **Motion** — GSAP scroll storytelling throughout: an opening image-sequence preloader that hands off into the cinematic hero intro (slow-zoom backdrop, character-by-character headline rise), Lenis inertial smooth scrolling, a pinned horizontal-scroll Rooms section, stacked-deck Experiences cards, scrubbed parallax on every photo, masked line-by-line headline reveals, count-up stats, and a footer that "opens" inside its frame with a rising backdrop word. Marquees (top ticker + testimonials) render multiple duplicated copies of their content so the loop never runs dry on ultra-wide screens. All motion is disabled for `prefers-reduced-motion` users.
 
 ## ✏️ Editing content
 

@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { useRef, type ElementType, type ReactNode } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 type RevealProps = {
   children: ReactNode;
@@ -12,9 +14,9 @@ type RevealProps = {
 };
 
 /**
- * Fades content up when it enters the viewport.
- * The actual animation lives in globals.css under [data-reveal],
- * which also handles prefers-reduced-motion.
+ * Fades content up when it enters the viewport, via GSAP ScrollTrigger.
+ * globals.css keeps [data-reveal] at opacity 0 before hydration so nothing
+ * flashes; reduced-motion users get everything visible with no animation.
  */
 export default function Reveal({
   children,
@@ -25,32 +27,30 @@ export default function Reveal({
 }: RevealProps) {
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useGSAP(() => {
     const el = ref.current;
     if (!el) return;
+    if (prefersReducedMotion()) {
+      gsap.set(el, { opacity: 1 });
+      return;
+    }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("is-inview");
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: 44 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.15,
+        ease: "power3.out",
+        delay: delay / 1000,
+        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+      }
     );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+  });
 
   return (
-    <Tag
-      ref={ref}
-      id={id}
-      data-reveal
-      className={className}
-      style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
-    >
+    <Tag ref={ref} id={id} data-reveal className={className}>
       {children}
     </Tag>
   );

@@ -21,7 +21,7 @@ export default function Marquee() {
             className="flex items-center gap-8 whitespace-nowrap font-display text-lg text-cream-dim sm:text-xl"
           >
             {item}
-            <span className="text-ember">✳</span>
+            <span className="text-teal">◆</span>
           </span>
         ))}
       </div>

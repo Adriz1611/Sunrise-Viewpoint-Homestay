@@ -20,7 +20,7 @@ export default function GettingHere() {
           title={
             <>
               Under three hours from the plains,{" "}
-              <em className="text-amber">a world above them</em>.
+              <em className="text-celadon">a world above them</em>.
             </>
           }
         />
@@ -35,7 +35,7 @@ export default function GettingHere() {
                       <h3 className="font-display text-xl text-cream">
                         {route.from}
                       </h3>
-                      <p className="font-numeric shrink-0 text-right text-sm text-amber">
+                      <p className="font-numeric shrink-0 text-right text-sm text-celadon">
                         {route.distance}
                         <span className="block text-xs text-cream-dim">
                           {route.time}
@@ -69,7 +69,7 @@ export default function GettingHere() {
                     <a
                       key={phone.number}
                       href={phone.href}
-                      className="font-numeric whitespace-nowrap text-base text-cream transition-colors hover:text-amber"
+                      className="font-numeric whitespace-nowrap text-base text-cream transition-colors hover:text-celadon"
                     >
                       {phone.number}
                     </a>
@@ -81,7 +81,7 @@ export default function GettingHere() {
                 href={MAP_DIRECTIONS_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3 rounded-full border keyline px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-ember hover:text-amber"
+                className="group inline-flex items-center gap-3 rounded-full border keyline px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-teal hover:text-celadon"
               >
                 Open in Google Maps
                 <span

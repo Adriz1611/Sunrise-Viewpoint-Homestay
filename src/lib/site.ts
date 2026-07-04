@@ -118,36 +118,59 @@ export const ACCOMMODATIONS = [
   },
 ];
 
+/**
+ * Experience facts are from the client's info sheet (distances, altitudes,
+ * seasons) — the images are representative Unsplash stock of each subject
+ * (see the note above ACCOMMODATIONS), each URL verified to resolve.
+ */
 export const EXPERIENCES = [
   {
     index: "A",
     title: "Sunrise over Kanchenjunga",
     body: "The reason for the name. A 180° panorama of the Kanchenjunga range catching first light — no walk required, just open the curtains.",
+    image:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "First light striking high snow peaks",
   },
   {
     index: "B",
     title: "Nights built for stargazing",
     body: "Crystal-clear Himalayan skies after dark, far from any city glow. Bring a blanket and stay out well past dinner.",
+    image:
+      "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "The Milky Way over a dark mountain silhouette",
   },
   {
     index: "C",
     title: "Namthing Pokhari",
     body: "A pine-ringed lake ≈2 km away at nearly 4,000 ft, home to the endangered Himalayan salamander. Best June–September, when the monsoon greens the forest.",
+    image:
+      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "A still lake ringed by dark forest",
   },
   {
     index: "D",
     title: "Birding in Latpanchar",
     body: "Inside the Mahananda Wildlife Sanctuary, ≈5 km away at ≈4,200 ft — over 200 bird species including the rufous-necked hornbill. Best October–April.",
+    image:
+      "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "A bright forest bird perched on a branch",
   },
   {
     index: "E",
     title: "Sittong's orange orchards",
     body: "≈2 km down the ridge, the \"Orange Village of West Bengal\" turns amber October–February, peaking from late December to February.",
+    image:
+      "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "Oranges ripening on the branch",
   },
   {
     index: "F",
     title: "The Teesta below",
     body: "On clear days, the Teesta river's emerald-green thread is visible in the valley far below — the view changes with every shift in the Himalayan weather.",
+    image:
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "A river threading through a forested valley",
   },
 ];
 
@@ -175,12 +198,14 @@ export const GALLERY = [
     alt: "Home-cooked meal served warm",
   },
   {
-    src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1800&auto=format&fit=crop",
-    alt: "Sun rising over rolling ridgelines",
-  },
-  {
     src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1800&auto=format&fit=crop",
     alt: "A cosy room lit with soft evening light",
+  },
+  // Kept last on purpose: the gallery's full-bleed panorama slot — give it
+  // a landscape, not an interior.
+  {
+    src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1800&auto=format&fit=crop",
+    alt: "Sun rising over rolling ridgelines",
   },
 ];
 
