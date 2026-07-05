@@ -1,5 +1,6 @@
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
+import { ArrowUpRight } from "@/components/icons";
 import {
   MAP_DIRECTIONS_URL,
   MAP_EMBED_SRC,
@@ -17,12 +18,7 @@ export default function GettingHere() {
         <SectionHeading
           index="07"
           label="Getting Here"
-          title={
-            <>
-              Under three hours from the plains,{" "}
-              <em className="text-celadon">a world above them</em>.
-            </>
-          }
+          title="Under three hours from NJP station and Bagdogra airport."
         />
 
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -51,10 +47,10 @@ export default function GettingHere() {
             <Reveal delay={300} className="mt-8 space-y-6">
               <p className="text-sm leading-relaxed text-cream-dim">
                 The last stretch climbs narrow hill roads through Kurseong and
-                Latpanchar — beautiful, and best driven before dark. We
-                arrange pick-up and drop-off from Bagdogra Airport, NJP
-                Station, Siliguri, or any location by road, plus local
-                sightseeing and vehicle hire for your whole stay.
+                Latpanchar. The road is scenic but narrow, so plan to arrive
+                before dark. We arrange pick-up and drop-off from Bagdogra
+                Airport, NJP Station, Siliguri, or any location by road, plus
+                local sightseeing and vehicle hire for your whole stay.
               </p>
 
               <div className="rounded-xl border keyline bg-ink-soft px-5 py-5 sm:px-6">
@@ -84,12 +80,7 @@ export default function GettingHere() {
                 className="group inline-flex items-center gap-3 rounded-full border keyline px-6 py-3.5 text-sm font-semibold text-cream transition-colors hover:border-teal hover:text-celadon"
               >
                 Open in Google Maps
-                <span
-                  aria-hidden
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                >
-                  ↗
-                </span>
+                <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </a>
             </Reveal>
           </div>

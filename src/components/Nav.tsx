@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CONTACT, NAV_LINKS } from "@/lib/site";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -21,6 +23,31 @@ export default function Nav() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  // Move focus to the first link when the menu opens
+  useEffect(() => {
+    if (open) {
+      overlayRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    }
+  }, [open]);
+
+  // Escape closes the menu and returns focus to the hamburger
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        hamburgerRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
+  const closeMenu = () => {
+    setOpen(false);
+    hamburgerRef.current?.focus();
+  };
 
   return (
     <header
@@ -42,17 +69,19 @@ export default function Nav() {
         </a>
 
         {/* Desktop links */}
-        <ul className="hidden items-center gap-7 xl:flex">
+        <ul className="hidden items-center gap-4 lg:flex xl:gap-6">
           {NAV_LINKS.map((link) => (
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                className="group whitespace-nowrap text-sm text-cream-dim transition-colors hover:text-cream"
+                className="group whitespace-nowrap text-[11px] text-cream-dim transition-colors hover:text-cream xl:text-xs"
               >
                 <span className="font-numeric mr-1.5 text-[0.65rem] text-teal">
-                  {link.index}
+                  ({link.index})
                 </span>
-                {link.label}
+                <span className="relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-teal after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                  {link.label}
+                </span>
               </a>
             </li>
           ))}
@@ -60,18 +89,20 @@ export default function Nav() {
 
         <a
           href={CONTACT.phones[0].href}
-          className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-colors hover:border-teal hover:text-celadon xl:block"
+          className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-[transform,color,border-color] duration-200 hover:border-teal hover:text-celadon active:scale-[0.97] lg:block"
         >
           {CONTACT.phones[0].number}
         </a>
 
         {/* Mobile menu button */}
         <button
+          ref={hamburgerRef}
           type="button"
           aria-expanded={open}
+          aria-controls="mobile-menu"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen(!open)}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 xl:hidden"
+          className="flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-1.5 lg:hidden"
         >
           <span
             className={`h-px w-6 bg-cream transition-transform duration-300 ${
@@ -88,7 +119,12 @@ export default function Nav() {
 
       {/* Mobile overlay menu */}
       <div
-        className={`fixed inset-0 top-[69px] z-40 bg-ink transition-opacity duration-300 xl:hidden ${
+        ref={overlayRef}
+        id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        inert={!open}
+        className={`fixed inset-0 top-[69px] z-40 bg-ink transition-opacity duration-300 lg:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       >
@@ -97,7 +133,7 @@ export default function Nav() {
             <li key={link.id}>
               <a
                 href={`#${link.id}`}
-                onClick={() => setOpen(false)}
+                onClick={closeMenu}
                 className="group flex items-baseline gap-4 border-b keyline py-4"
                 style={{ transitionDelay: `${i * 40}ms` }}
               >
@@ -113,6 +149,7 @@ export default function Nav() {
           <li className="mt-8">
             <a
               href={CONTACT.phones[0].href}
+              onClick={closeMenu}
               className="font-numeric text-xl text-celadon"
             >
               {CONTACT.phones[0].number}

@@ -1,6 +1,7 @@
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import {
+  ACCOMMODATIONS,
   CONTACT,
   MEALS_EXTRA,
   MEALS_INCLUDED,
@@ -8,6 +9,16 @@ import {
   TARIFF,
   TARIFF_NOTES,
 } from "@/lib/site";
+
+// Quick-glance highlights for the chip row below — derived only from facts
+// already present in site.ts (MEALS_INCLUDED, ACCOMMODATIONS features).
+const HOT_WATER = ACCOMMODATIONS.some((room) =>
+  room.features.some((f) => /hot water/i.test(f))
+);
+const TARIFF_HIGHLIGHTS = [
+  `All ${MEALS_INCLUDED.length} meals included`,
+  ...(HOT_WATER ? ["Hot water in every room"] : []),
+];
 
 export default function Tariff() {
   return (
@@ -18,18 +29,30 @@ export default function Tariff() {
           label="Tariff & Booking"
           title={
             <>
-              Honest hill prices, <em className="text-celadon">meals included</em>.
+              One per-person price, <em className="text-celadon">meals included</em>.
             </>
           }
         />
+
+        {/* Quick-glance highlights */}
+        <Reveal className="mb-8 flex flex-wrap gap-2">
+          {TARIFF_HIGHLIGHTS.map((item) => (
+            <span
+              key={item}
+              className="rounded-full border border-cream/20 bg-ink/70 px-3.5 py-1.5 text-xs text-cream transition-colors duration-300 hover:border-cream/25"
+            >
+              {item}
+            </span>
+          ))}
+        </Reveal>
 
         {/* Price board — full-width rows, menu style */}
         <ul className="divide-y keyline border-y keyline">
           {TARIFF.map((item, i) => (
             <Reveal as="li" key={item.name} delay={i * 70}>
-              <div className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 py-7 transition-colors duration-300 hover:bg-ink-soft sm:px-4">
+              <div className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 border border-transparent py-7 transition-colors duration-300 hover:border-cream/25 hover:bg-ink-soft sm:px-4">
                 <span className="font-numeric text-xs text-teal">
-                  T–{String(i + 1).padStart(2, "0")}
+                  ({String(i + 1).padStart(2, "0")})
                 </span>
                 <div className="min-w-0 flex-1">
                   <h3 className="font-display text-2xl text-cream transition-colors duration-300 group-hover:text-celadon sm:text-3xl">
@@ -41,11 +64,11 @@ export default function Tariff() {
                     </p>
                   )}
                 </div>
-                <p className="text-right">
+                <p className="flex items-baseline gap-2 text-right">
                   <span className="font-numeric text-3xl text-celadon sm:text-5xl">
                     {item.price}
                   </span>
-                  <span className="block text-xs text-cream-dim">{item.unit}</span>
+                  <span className="text-xs text-cream-dim">{item.unit}</span>
                 </p>
               </div>
             </Reveal>
@@ -95,11 +118,11 @@ export default function Tariff() {
           <div className="overflow-hidden rounded-3xl border keyline bg-ink-soft">
             <div className="grid items-center gap-10 p-8 sm:p-12 lg:grid-cols-[1fr_auto]">
               <div>
-                <p className="font-numeric text-xs uppercase tracking-[0.25em] text-teal">
+                <p className="font-numeric text-xs uppercase tracking-[0.2em] text-teal">
                   Reserve
                 </p>
                 <h3 className="font-display mt-4 text-3xl leading-tight text-cream sm:text-4xl">
-                  One call holds your sunrise.
+                  One phone call is all it takes.
                 </h3>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
@@ -119,7 +142,7 @@ export default function Tariff() {
                   <a
                     key={phone.number}
                     href={phone.href}
-                    className={`font-numeric whitespace-nowrap rounded-full px-8 py-4 text-center text-lg transition-colors duration-300 ${
+                    className={`font-numeric whitespace-nowrap rounded-full px-8 py-4 text-center text-xl transition-[transform,color,background-color,border-color] duration-200 active:scale-[0.97] sm:text-2xl ${
                       i === 0
                         ? "bg-cream text-ink hover:bg-celadon"
                         : "border keyline text-cream hover:border-teal hover:text-celadon"

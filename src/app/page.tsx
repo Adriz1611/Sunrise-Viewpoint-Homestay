@@ -1,4 +1,5 @@
 import About from "@/components/About";
+import CallPill from "@/components/CallPill";
 import Experiences from "@/components/Experiences";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
@@ -15,8 +16,14 @@ export default function Home() {
   return (
     <>
       <SmoothScroll />
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:border focus:border-teal focus:bg-ink focus:px-5 focus:py-3 focus:text-sm focus:text-cream"
+      >
+        Skip to content
+      </a>
       <Nav />
-      <main>
+      <main id="main">
         <Hero />
         <Marquee />
         <About />
@@ -28,6 +35,7 @@ export default function Home() {
         <GettingHere />
       </main>
       <Footer />
+      <CallPill />
     </>
   );
 }

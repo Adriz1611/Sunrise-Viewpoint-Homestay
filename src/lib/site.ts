@@ -8,6 +8,13 @@
  * an approximation ("≈") rather than invented as fact.
  */
 
+/**
+ * Placeholder domain — confirm with the client before launch.
+ * Used in metadata (metadataBase, og:url, canonical, sitemap), JSON-LD schema,
+ * and throughout for absolute URLs where required.
+ */
+export const SITE_URL = "https://sunriseviewpointhomestay.com";
+
 export const CONTACT = {
   phones: [
     { label: "Bookings", number: "+91 98006 37784", href: "tel:+919800637784" },
@@ -73,7 +80,7 @@ export const ACCOMMODATIONS = [
     count: "6 rooms",
     occupancy: "up to 4 guests per room",
     tagline:
-      "Simple, spotless rooms built into the tea garden slope — every one with an attached, hot-water bath.",
+      "Simple, spotless rooms built into the tea garden slope. Every room has an attached hot-water bath.",
     features: [
       "Attached bath, hot water",
       "Tea-garden views",
@@ -89,7 +96,7 @@ export const ACCOMMODATIONS = [
     count: "2 rooms",
     occupancy: "up to 6 guests per room",
     tagline:
-      "Larger rooms for groups — cousins, friends, or three generations travelling together.",
+      "Larger rooms that sleep up to six, for families and groups travelling together.",
     features: [
       "Two beds, sleeps up to 6",
       "Attached bath, hot water",
@@ -97,15 +104,15 @@ export const ACCOMMODATIONS = [
       "Best value for groups",
     ],
     image:
-      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A rustic cottage-style room with wooden accents",
+      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1600&auto=format&fit=crop",
+    imageAlt: "A simple warm-toned guesthouse bedroom with wooden furniture",
   },
   {
     name: "Camping Tents",
     count: "pitched on request",
     occupancy: "3–4 guests per tent (larger tents on request)",
     tagline:
-      "Sleep right on the ridge, under a full Himalayan sky — as close to the sunrise as you can get.",
+      "Tents pitched right on the ridge, next to the sunrise viewpoint.",
     features: [
       "Common washroom",
       "Bedding provided",
@@ -125,23 +132,20 @@ export const ACCOMMODATIONS = [
  */
 export const EXPERIENCES = [
   {
-    index: "A",
     title: "Sunrise over Kanchenjunga",
-    body: "The reason for the name. A 180° panorama of the Kanchenjunga range catching first light — no walk required, just open the curtains.",
+    body: "A 180° panorama of the Kanchenjunga range at first light, visible straight from the rooms. It is what the homestay is named for.",
     image:
       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1600&auto=format&fit=crop",
     imageAlt: "First light striking high snow peaks",
   },
   {
-    index: "B",
     title: "Nights built for stargazing",
-    body: "Crystal-clear Himalayan skies after dark, far from any city glow. Bring a blanket and stay out well past dinner.",
+    body: "Clear high-altitude skies with almost no light pollution. The stargazing is best on cold, moonless nights.",
     image:
       "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1600&auto=format&fit=crop",
     imageAlt: "The Milky Way over a dark mountain silhouette",
   },
   {
-    index: "C",
     title: "Namthing Pokhari",
     body: "A pine-ringed lake ≈2 km away at nearly 4,000 ft, home to the endangered Himalayan salamander. Best June–September, when the monsoon greens the forest.",
     image:
@@ -149,15 +153,13 @@ export const EXPERIENCES = [
     imageAlt: "A still lake ringed by dark forest",
   },
   {
-    index: "D",
     title: "Birding in Latpanchar",
-    body: "Inside the Mahananda Wildlife Sanctuary, ≈5 km away at ≈4,200 ft — over 200 bird species including the rufous-necked hornbill. Best October–April.",
+    body: "Inside the Mahananda Wildlife Sanctuary, ≈5 km away at ≈4,200 ft. Home to over 200 bird species, including the rufous-necked hornbill. Best October–April.",
     image:
       "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1600&auto=format&fit=crop",
     imageAlt: "A bright forest bird perched on a branch",
   },
   {
-    index: "E",
     title: "Sittong's orange orchards",
     body: "≈2 km down the ridge, the \"Orange Village of West Bengal\" turns amber October–February, peaking from late December to February.",
     image:
@@ -165,9 +167,11 @@ export const EXPERIENCES = [
     imageAlt: "Oranges ripening on the branch",
   },
   {
-    index: "F",
     title: "The Teesta below",
-    body: "On clear days, the Teesta river's emerald-green thread is visible in the valley far below — the view changes with every shift in the Himalayan weather.",
+    body: "On clear days, the Teesta river's emerald-green thread is visible in the valley far below. The view shifts with the weather through the day.",
+    // Kept as representative stock (no better-matching river-valley
+    // candidate was found — see agent notes); this remains a generic
+    // river-valley stand-in rather than the actual Teesta.
     image:
       "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop",
     imageAlt: "A river threading through a forested valley",
@@ -184,28 +188,34 @@ export const GALLERY = [
   {
     src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1800&auto=format&fit=crop",
     alt: "Fog rolling over forested hills at dawn",
+    caption: "Morning on the ridge",
   },
   {
     src: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1800&auto=format&fit=crop",
     alt: "Snow peaks of the high Himalaya",
+    caption: "The high range, clear-day view",
   },
   {
     src: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1800&auto=format&fit=crop",
     alt: "Morning light through pine forest",
+    caption: "Light through the pines",
   },
   {
-    src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1800&auto=format&fit=crop",
-    alt: "Home-cooked meal served warm",
+    src: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=1800&auto=format&fit=crop",
+    alt: "Curries and rice served in steel bowls, home-style",
+    caption: "A home-cooked spread",
   },
   {
-    src: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=1800&auto=format&fit=crop",
-    alt: "A cosy room lit with soft evening light",
+    src: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?q=80&w=1800&auto=format&fit=crop",
+    alt: "A cup of dark tea beside loose dried tea leaves",
+    caption: "Tea from the hills",
   },
   // Kept last on purpose: the gallery's full-bleed panorama slot — give it
   // a landscape, not an interior.
   {
     src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1800&auto=format&fit=crop",
     alt: "Sun rising over rolling ridgelines",
+    caption: "First light over the hills",
   },
 ];
 

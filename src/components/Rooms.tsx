@@ -58,8 +58,8 @@ export default function Rooms() {
             label="Rooms"
             title={
               <>
-                Eight rooms and camping tents. Every one of them{" "}
-                <em className="text-celadon">faces the light</em>.
+                Eight rooms and camping tents. All of them face{" "}
+                <em className="text-celadon">east</em>.
               </>
             }
           />
@@ -93,7 +93,7 @@ export default function Rooms() {
             <div className="p-6 sm:absolute sm:inset-x-0 sm:bottom-0 sm:p-9 lg:p-12">
               <div className="flex items-baseline justify-between">
                 <p className="font-numeric text-xs text-teal">
-                  R–{String(i + 1).padStart(2, "0")}
+                  ({String(i + 1).padStart(2, "0")})
                 </p>
                 <p className="font-numeric text-xs uppercase tracking-[0.2em] text-cream-dim">
                   {room.count}
@@ -109,7 +109,7 @@ export default function Rooms() {
                 {room.features.map((feature) => (
                   <li
                     key={feature}
-                    className="rounded-full border border-cream/20 bg-ink/40 px-3.5 py-1.5 text-xs text-cream backdrop-blur-sm"
+                    className="rounded-full border border-cream/20 bg-ink/70 px-3.5 py-1.5 text-xs text-cream transition-colors duration-300 hover:border-cream/25"
                   >
                     {feature}
                   </li>

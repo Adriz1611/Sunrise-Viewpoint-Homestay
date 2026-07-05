@@ -51,11 +51,7 @@ export default function Experiences() {
         <SectionHeading
           index="03"
           label="Experiences"
-          title={
-            <>
-              The days write <em className="text-celadon">themselves</em> up here.
-            </>
-          }
+          title="Six things worth leaving the veranda for."
         />
 
         <div className="space-y-6 sm:space-y-8">
@@ -81,8 +77,7 @@ export default function Experiences() {
                 </div>
 
                 <div className="flex flex-col justify-between gap-10 p-7 sm:p-10 lg:p-12">
-                  <div className="flex items-baseline justify-between">
-                    <p className="font-numeric text-sm text-teal">({exp.index})</p>
+                  <div className="flex items-baseline justify-end">
                     <p className="font-numeric text-xs text-cream-dim">
                       {String(i + 1).padStart(2, "0")} /{" "}
                       {String(EXPERIENCES.length).padStart(2, "0")}
@@ -96,7 +91,7 @@ export default function Experiences() {
                       {exp.body}
                     </p>
                   </div>
-                  <p className="font-numeric text-[0.65rem] uppercase tracking-[0.25em] text-cream-dim">
+                  <p className="font-numeric text-[0.65rem] uppercase tracking-[0.2em] text-cream-dim">
                     Aahaldara · Sittong III
                   </p>
                 </div>

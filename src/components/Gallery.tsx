@@ -24,12 +24,7 @@ export default function Gallery() {
         <SectionHeading
           index="04"
           label="Gallery"
-          title={
-            <>
-              What the ridge looks like when{" "}
-              <em className="text-celadon">nobody is posing</em>.
-            </>
-          }
+          title="Scenes from the ridge, through the seasons."
         />
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-12 sm:gap-4">
@@ -38,18 +33,20 @@ export default function Gallery() {
             return (
               <figure
                 key={photo.src}
-                className={`relative col-span-1 ${cell.span} ${cell.height}`}
+                className={`group relative col-span-1 overflow-hidden rounded-xl ${cell.span} ${cell.height}`}
               >
-                <ParallaxImage
-                  src={photo.src}
-                  alt={photo.alt}
-                  sizes="(min-width: 640px) 60vw, 100vw"
-                  speed={cell.speed}
-                  className="h-full rounded-xl"
-                />
+                <div className="h-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                  <ParallaxImage
+                    src={photo.src}
+                    alt={photo.alt}
+                    sizes="(min-width: 640px) 60vw, 100vw"
+                    speed={cell.speed}
+                    className="h-full rounded-xl"
+                  />
+                </div>
                 <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-xl bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12 sm:p-5">
                   <span className="font-display text-lg tracking-tight text-cream sm:text-xl">
-                    {photo.alt}
+                    {photo.caption}
                   </span>
                 </figcaption>
               </figure>

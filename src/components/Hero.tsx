@@ -4,16 +4,14 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
-import { onRevealed } from "@/lib/reveal";
 import { META } from "@/lib/site";
 
 /**
  * Cinematic opening: the backdrop settles from a slow zoom while the
- * headline rises character by character out of line masks. The intro waits
- * for the Preloader's handoff (onRevealed) so it plays in view, not hidden
- * behind the overlay. On scroll the backdrop parallaxes at a slower rate
- * than the page and the foreground content drifts up and fades — the
- * classic "camera pulling away" beat.
+ * headline rises character by character out of line masks. The intro plays
+ * on mount. On scroll the backdrop parallaxes at a slower rate than the
+ * page and the foreground content drifts up and fades — the classic
+ * "camera pulling away" beat.
  */
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -22,7 +20,7 @@ export default function Hero() {
     (_, contextSafe) => {
       if (prefersReducedMotion()) return;
 
-      // — Intro timeline (starts when the preloader lifts) —
+      // — Intro timeline (plays on mount) —
       const runIntro = contextSafe!(() => {
         gsap.fromTo(
           ".hero-img",
@@ -55,7 +53,16 @@ export default function Hero() {
           delay: 1,
         });
       });
-      onRevealed(runIntro);
+      runIntro();
+
+      // — Scroll cue: gentle repeating pulse, origin top so it "grows" —
+      gsap.to(".hero-scroll-line", {
+        scaleY: 1.6,
+        duration: 1.6,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
 
       // — Scroll-scrubbed parallax —
       // The oversized wrapper (-inset-y-[12%]) gives the drift room to move
@@ -122,17 +129,27 @@ export default function Hero() {
 
         <div className="mt-8 flex flex-col justify-between gap-8 sm:mt-12 sm:flex-row sm:items-end">
           <p className="hero-fade max-w-md text-base leading-relaxed text-cream-dim sm:text-lg">
-            A family-run homestay on the Aahaldara ridge, where the day begins
-            with Kanchenjunga on fire and the Teesta valley waking up in cloud
-            far below.
+            A family-run homestay on the Aahaldara ridge, with a 180° sunrise
+            view of the Kanchenjunga range and the Teesta valley far below.
           </p>
           <a
             href="#tariff"
-            className="hero-fade inline-block shrink-0 self-start rounded-full bg-cream px-7 py-3.5 text-sm font-semibold text-ink transition-colors duration-300 hover:bg-celadon sm:self-auto"
+            className="hero-fade inline-block shrink-0 self-start rounded-full bg-cream px-7 py-3.5 text-sm font-semibold text-ink transition-[transform,color,background-color] duration-200 hover:bg-celadon active:scale-[0.97] sm:self-auto"
           >
-            Book your dawn
+            Call to book
           </a>
         </div>
+      </div>
+
+      {/* Scroll cue — fades with the rest of hero-content on scroll */}
+      <div
+        aria-hidden
+        className="hero-content hero-scroll-cue pointer-events-none absolute inset-x-0 bottom-6 flex flex-col items-center gap-3"
+      >
+        <span className="font-numeric text-[0.6rem] uppercase tracking-[0.2em] text-cream-dim">
+          Scroll
+        </span>
+        <span className="hero-scroll-line block h-12 w-px origin-top bg-cream/40" />
       </div>
     </section>
   );

@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import Reveal from "@/components/Reveal";
+import { Star } from "@/components/icons";
 import { CONTACT, GOOGLE_REVIEWS, META, TRANSPORT_CONTACT } from "@/lib/site";
 
 export default function Footer() {
@@ -97,8 +98,8 @@ export default function Footer() {
 
       <div className="footer-inner relative mx-auto max-w-7xl">
         <Reveal>
-          <p className="font-numeric text-xs uppercase tracking-[0.25em] text-teal">
-            Come see for yourself
+          <p className="font-numeric text-xs uppercase tracking-[0.2em] text-teal">
+            Plan your visit
           </p>
         </Reveal>
         <AnimatedTitle
@@ -162,8 +163,9 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="mt-5 inline-flex items-center gap-2 rounded-full border keyline px-4 py-2 text-xs text-cream transition-colors hover:border-teal hover:text-celadon"
             >
-              <span className="font-numeric text-celadon">
-                {GOOGLE_REVIEWS.rating} ★
+              <span className="font-numeric inline-flex items-center gap-1 text-celadon">
+                {GOOGLE_REVIEWS.rating}
+                <Star className="h-3 w-3" />
               </span>
               on Google · {GOOGLE_REVIEWS.count} reviews
             </a>

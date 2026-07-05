@@ -17,18 +17,13 @@ export default function About() {
         <SectionHeading
           index="01"
           label="The Homestay"
-          title={
-            <>
-              Built by the Chamling family, on a ridge they turned from{" "}
-              <em className="text-celadon">barren to blooming</em>.
-            </>
-          }
+          title="Built by the Chamling family, on a ridge they planted into a working tea garden."
         />
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <ParallaxImage
-            src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1800&auto=format&fit=crop"
-            alt="First light breaking over the valley below the homestay"
+            src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1800&auto=format&fit=crop"
+            alt="Green ridgelines rolling toward a valley in soft light"
             sizes="(min-width: 1024px) 50vw, 100vw"
             speed={9}
             className="aspect-[4/5] rounded-2xl lg:aspect-auto lg:min-h-[560px]"
@@ -37,18 +32,15 @@ export default function About() {
           <div className="flex flex-col justify-between gap-12">
             <div className="space-y-6 text-lg leading-relaxed text-cream-dim">
               <Reveal as="p">
-                Locally known as Chamling Homestay, Sunrise Viewpoint sits on a
-                ridge in Aahal Dara, Sittong III — land that was once barren,
-                nurtured over years into the tea garden you&apos;ll wake up in
-                today. It&apos;s the kind of place people used to drive past on
-                the way to Darjeeling, until they saw what the sky does here
-                at dawn.
+                The family turned land that was once barren into the tea
+                garden that surrounds the rooms today. The ridge looks
+                straight at the Kanchenjunga range, with the Teesta valley
+                below.
               </Reveal>
               <Reveal as="p" delay={100}>
-                Harkaram and Saru Chamling run it with their three daughters —
-                Rakhee, Neeta and S. Chamling — on a simple philosophy: treat
-                every guest like family. Nearly a decade in, every meal is
-                still cooked fresh, every smile still genuine.
+                Meals are cooked at home by the family and included in the
+                tariff. Rooms are simple, the water is hot, and the veranda
+                faces the range.
               </Reveal>
             </div>
 
@@ -69,7 +61,7 @@ export default function About() {
               ))}
             </dl>
 
-            <Reveal className="font-numeric text-xs uppercase tracking-[0.25em] text-cream-dim">
+            <Reveal className="font-numeric text-xs uppercase tracking-[0.2em] text-cream-dim">
               {META.coordinates} — {META.region}
             </Reveal>
           </div>
