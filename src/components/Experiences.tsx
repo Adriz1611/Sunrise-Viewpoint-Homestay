@@ -9,7 +9,8 @@ import { EXPERIENCES } from "@/lib/site";
 
 /**
  * Stacked-deck scroll: each card pins below the nav while the next one
- * slides up over it; the covered card recedes (scales down and dims) in
+ * slides up over it; the covered card recedes (scales down, staying fully
+ * opaque so its text never ghosts through the incoming card mid-scrub) in
  * scrub with the incoming card's travel. Sticky positioning does the
  * pinning, GSAP does the recede — no pin-spacer juggling required.
  */
@@ -25,14 +26,13 @@ export default function Experiences() {
         const next = cards[i + 1];
         if (!next) return;
         gsap.to(card, {
-          scale: 0.92,
-          opacity: 0.45,
+          scale: 0.94,
           transformOrigin: "center top",
           ease: "none",
           scrollTrigger: {
             trigger: next,
-            start: "top bottom",
-            end: "top 18%",
+            start: "top 80%",
+            end: "top 16%",
             scrub: true,
           },
         });

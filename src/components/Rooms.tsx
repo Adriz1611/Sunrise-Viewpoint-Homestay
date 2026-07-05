@@ -49,7 +49,7 @@ export default function Rooms() {
     <section
       ref={root}
       id="rooms"
-      className="scroll-mt-24 overflow-hidden bg-ink-soft py-24 sm:py-32 lg:flex lg:min-h-svh lg:flex-col lg:justify-center lg:py-0"
+      className="scroll-mt-24 overflow-hidden bg-ink-soft py-24 sm:py-32 lg:flex lg:h-svh lg:flex-col lg:py-0"
     >
       <div className="px-5 sm:px-8 lg:pt-28">
         <div className="mx-auto max-w-7xl">
@@ -68,12 +68,12 @@ export default function Rooms() {
 
       <div
         ref={track}
-        className="flex flex-col gap-8 px-5 sm:px-8 lg:flex-row lg:flex-nowrap lg:items-stretch lg:pb-20 lg:pr-[14vw]"
+        className="flex flex-col gap-8 px-5 sm:px-8 lg:min-h-0 lg:flex-1 lg:flex-row lg:flex-nowrap lg:items-stretch lg:pb-20 lg:pr-[14vw]"
       >
         {ACCOMMODATIONS.map((room, i) => (
           <article
             key={room.name}
-            className="relative overflow-hidden rounded-3xl border keyline bg-ink lg:h-[62vh] lg:w-[70vw] lg:shrink-0"
+            className="relative overflow-hidden rounded-3xl border keyline bg-ink lg:h-full lg:w-[70vw] lg:shrink-0"
           >
             <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-auto lg:h-full">
               <Image
