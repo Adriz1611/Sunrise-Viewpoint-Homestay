@@ -25,9 +25,14 @@ A single-page marketing site for a real homestay client (not a demo). Read this 
 - The admin panel lives at `/admin`, backed by `src/payload.config.ts` with collections
   in `src/collections/`. REST/GraphQL are at `/api/*`, and the MCP server at `/api/mcp`.
 - `src/app` is split into two route groups: `(frontend)` holds the public marketing site
-  (layout, page, globals.css, sitemap, robots), `(payload)` holds Payload's generated
-  admin and API routes. Route groups do not affect URLs — `/`, `/sitemap.xml`, and
-  `/robots.txt` are unchanged.
+  (layout, page, globals.css, sitemap), `(payload)` holds Payload's generated admin and
+  API routes. Route groups do not affect URLs — `/`, `/sitemap.xml`, and `/robots.txt`
+  are unchanged.
+- **`src/app/robots.ts` and `src/app/favicon.ico` must stay at the `src/app/` root** — do
+  not tidy them into `(frontend)`. Next anchors their metadata patterns to the app root
+  (`FAVICON_REGEX = /^[\/]favicon\.ico$/`, `ROBOTS_TXT_REGEX = /^[\/]robots\.txt$/` in
+  `next/dist/lib/metadata/is-metadata-route.js`), so a route-group prefix 404s both
+  routes with no build error. `sitemap.ts` nests fine because its regex is unanchored.
 - **`src/lib/site.ts` is still the only source of truth for homestay facts.** Payload
   currently manages nothing but `Users` and `Media`. Do not treat a Payload collection
   as a second home for a price, phone number, or distance.
