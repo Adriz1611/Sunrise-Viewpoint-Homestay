@@ -42,11 +42,25 @@ An editorial, single-page marketing site built for a real client — not a templ
 
 ## 🚀 Getting started
 
+The app now runs on Payload CMS with a Postgres backend, so `dev` and `build` need
+Docker running.
+
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build    # production build
+cp .env.example .env
+# generate a real secret and put it in .env as PAYLOAD_SECRET
+openssl rand -hex 32
+npm run dev      # starts Postgres via Docker, then http://localhost:3000
+```
+
+Visit `http://localhost:3000/admin` and create the first admin user — Payload's admin
+panel prompts for this automatically until one exists.
+
+```bash
+npm run build    # production build (also requires Docker; see above)
 npm run lint     # ESLint
+npm run db:up    # start the Postgres container by hand
+npm run db:down  # stop it
 ```
 
 ## 🧭 Sections
@@ -98,6 +112,7 @@ One 2-star review was left out of this curated showcase — the full spread, cri
 > **Still TODO before going live**
 > - Swap the stock room/About/gallery photos for the family's own photography whenever it's available.
 > - Confirm current tariff rates by phone — the sourced numbers can change seasonally.
+> - Payload CMS is installed but currently manages no site content — only `Users` and `Media` collections exist, and `src/lib/site.ts` is still the sole source of truth for every homestay fact on the page.
 
 ## 📁 Project structure
 
