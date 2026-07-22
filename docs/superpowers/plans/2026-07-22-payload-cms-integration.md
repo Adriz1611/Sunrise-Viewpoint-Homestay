@@ -606,23 +606,24 @@ mkdir -p "src/app/(payload)/admin/[[...segments]]" "src/app/(payload)/api/[...sl
 
 - [ ] **Step 2: Create `src/app/(payload)/layout.tsx`**
 
+Note: `@payloadcms/next@3.86.0` exports only `metadata`, `RootLayout`, and
+`handleServerFunctions` from `@payloadcms/next/layouts`. Payload's `main`-branch
+template additionally imports `generatePayloadViewport` and re-exports it as
+`generateViewport` — that symbol does not exist in 3.86.0 and breaks the build.
+The version below is correct for the pinned release; verified against
+`node_modules/@payloadcms/next/dist/exports/layouts.js`.
+
 ```tsx
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import config from '@payload-config'
 import '@payloadcms/next/css'
 import type { ServerFunctionClient } from 'payload'
-import {
-  generatePayloadViewport,
-  handleServerFunctions,
-  RootLayout,
-} from '@payloadcms/next/layouts'
+import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
 
 import { importMap } from './admin/importMap.js'
 import './custom.scss'
-
-export const generateViewport = generatePayloadViewport
 
 type Args = {
   children: React.ReactNode
