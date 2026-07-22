@@ -7,12 +7,17 @@ const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   images: {
-    localPatterns: [
+    // Only Unsplash is allowlisted — see AGENTS.md "Images".
+    remotePatterns: [
       {
-        pathname: '/api/media/file/**',
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 2678400,
   },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {

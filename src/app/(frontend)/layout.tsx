@@ -1,19 +1,137 @@
-import React from 'react'
-import './styles.css'
+import type { Metadata, Viewport } from "next";
+import { Fraunces, Manrope, Space_Grotesk } from "next/font/google";
+import { SITE_URL, META, CONTACT, TARIFF } from "@/lib/site";
+import "./globals.css";
 
-export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
-}
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  axes: ["opsz"],
+  display: "swap",
+});
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+});
+
+const siteName = "Sunrise Viewpoint Homestay";
+const siteDescription =
+  "A family-run homestay on the Aahaldara ridge above the Teesta valley, also known as Chamling Homestay. Wake to a 180° sunrise over Kanchenjunga, eat home-cooked meals from our own kitchen and tea garden, and walk the orange orchards of Sittong.";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: "Sunrise Viewpoint Homestay — Aahaldara, Darjeeling Hills",
+  description: siteDescription,
+  keywords: [
+    "Sunrise Viewpoint Homestay",
+    "Chamling Homestay",
+    "Aahaldara",
+    "Aahal Dara",
+    "Sittong",
+    "Latpanchar",
+    "Darjeeling homestay",
+    "Kanchenjunga sunrise",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Sunrise Viewpoint Homestay — Aahaldara",
+    description:
+      "Wake to a 180° sunrise over Kanchenjunga and the Teesta valley, from a family-run homestay on the Aahaldara ridge. Also known as Chamling Homestay.",
+    type: "website",
+    locale: "en_IN",
+    url: "/",
+    siteName,
+    images: [
+      {
+        url: "/images/hero-kanchenjunga.jpg",
+        width: 2560,
+        height: 1707,
+        alt: "The Kanchenjunga range catching first light at sunrise",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sunrise Viewpoint Homestay — Aahaldara",
+    description:
+      "Wake to a 180° sunrise over Kanchenjunga and the Teesta valley, from a family-run homestay on the Aahaldara ridge. Also known as Chamling Homestay.",
+    images: ["/images/hero-kanchenjunga.jpg"],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#021c1b",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // Parse coordinates from "26.9369° N, 88.4039° E" format
+  const coordParts = META.coordinates.match(/[\d.]+/g) || [];
+  const latitude = parseFloat(coordParts[0] ?? "26.9369");
+  const longitude = parseFloat(coordParts[1] ?? "88.4039");
+
+  // Extract min/max tariff from TARIFF data
+  const tariffPrices = TARIFF.map((t) =>
+    parseInt(t.price.replace(/[₹,]/g, ""), 10)
+  );
+  const minTariff = Math.min(...tariffPrices);
+  const maxTariff = Math.max(...tariffPrices);
+
+  const jsonLdSchema = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    name: siteName,
+    description: siteDescription,
+    url: SITE_URL,
+    telephone: CONTACT.phones[0].number,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Sittong III",
+      addressRegion: "West Bengal",
+      addressCountry: "IN",
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude,
+      longitude,
+    },
+    priceRange: `₹${minTariff}–₹${maxTariff} per person`,
+    image: `${SITE_URL}/images/hero-kanchenjunga.jpg`,
+  };
 
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased`}
+    >
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+        />
+      </head>
       <body>
-        <main>{children}</main>
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
+        {children}
       </body>
     </html>
-  )
+  );
 }

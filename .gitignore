@@ -39,12 +39,11 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+!.env.example
 
+# Payload upload storage
 /media
 
-# Playwright
-node_modules/
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+# Agent skills — machine-local, restorable from skills-lock.json via
+# `npx skills experimental_install` (same pattern as node_modules + package-lock.json)
+/.agents/

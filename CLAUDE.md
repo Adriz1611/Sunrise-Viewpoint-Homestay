@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # Claude Code
 
 This project uses the Payload CMS skill at `.claude/skills/payload/`.
