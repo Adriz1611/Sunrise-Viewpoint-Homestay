@@ -1,4 +1,10 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { withPayload } from "@payloadcms/next/withPayload";
 import type { NextConfig } from "next";
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -12,6 +18,9 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2678400,
   },
+  turbopack: {
+    root: path.resolve(dirname),
+  },
 };
 
-export default nextConfig;
+export default withPayload(nextConfig, { devBundleServerPackages: false });
