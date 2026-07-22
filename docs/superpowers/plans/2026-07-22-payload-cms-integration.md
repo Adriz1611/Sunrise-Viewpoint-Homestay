@@ -43,7 +43,15 @@
 - `src/payload-types.ts` — **generated**, never hand-written
 
 **Moved (`git mv`, contents unmodified):**
-- `src/app/{layout.tsx,page.tsx,globals.css,favicon.ico,sitemap.ts,robots.ts}` → `src/app/(frontend)/`
+- `src/app/{layout.tsx,page.tsx,globals.css,sitemap.ts}` → `src/app/(frontend)/`
+
+**Deliberately NOT moved — must stay at `src/app/` root:**
+- `src/app/robots.ts` and `src/app/favicon.ico`. Next 16's metadata matcher anchors
+  these two patterns to the app root (`node_modules/next/dist/lib/metadata/is-metadata-route.js`):
+  `FAVICON_REGEX = /^[\/]favicon\.ico$/` and `ROBOTS_TXT_REGEX = /^[\/]robots\.txt$/`.
+  A route-group prefix fails the `^` anchor and both routes 404. `SITEMAP_XML_REGEX`
+  is unanchored (`/[\/]sitemap\.xml$/`), which is why `sitemap.ts` nests fine.
+  Verified empirically in Task 2.
 
 **Modified:**
 - `package.json` — add `"type": "module"`, dependencies, scripts
@@ -211,9 +219,9 @@ Pure file move, no Payload code. Isolating it keeps the rename diff readable and
 - Move: `src/app/layout.tsx` → `src/app/(frontend)/layout.tsx`
 - Move: `src/app/page.tsx` → `src/app/(frontend)/page.tsx`
 - Move: `src/app/globals.css` → `src/app/(frontend)/globals.css`
-- Move: `src/app/favicon.ico` → `src/app/(frontend)/favicon.ico`
 - Move: `src/app/sitemap.ts` → `src/app/(frontend)/sitemap.ts`
-- Move: `src/app/robots.ts` → `src/app/(frontend)/robots.ts`
+- **Leave in place:** `src/app/robots.ts`, `src/app/favicon.ico` — Next anchors both
+  patterns to the app root, so moving them 404s the routes. See File Structure above.
 
 **Interfaces:**
 - Consumes: nothing from Task 1.
@@ -236,13 +244,12 @@ mkdir -p "src/app/(frontend)"
 git mv src/app/layout.tsx "src/app/(frontend)/layout.tsx"
 git mv src/app/page.tsx "src/app/(frontend)/page.tsx"
 git mv src/app/globals.css "src/app/(frontend)/globals.css"
-git mv src/app/favicon.ico "src/app/(frontend)/favicon.ico"
 git mv src/app/sitemap.ts "src/app/(frontend)/sitemap.ts"
-git mv src/app/robots.ts "src/app/(frontend)/robots.ts"
 ls -a src/app
 ```
 
-Expected: `src/app` now contains only `.`, `..`, and `(frontend)`.
+Expected: `src/app` contains `(frontend)`, plus `robots.ts` and `favicon.ico`, which
+stay at the root because Next anchors their metadata patterns there.
 
 - [ ] **Step 3: Confirm no import paths need changing**
 

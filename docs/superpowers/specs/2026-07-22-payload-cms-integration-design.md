@@ -43,13 +43,13 @@ groups. Route groups do not affect URLs, so every public path is unchanged.
 
 ```
 src/app/
+├── robots.ts              # STAYS at root — Next anchors ^/robots.txt
+├── favicon.ico            # STAYS at root — Next anchors ^/favicon.ico
 ├── (frontend)/            # git mv from src/app/
 │   ├── layout.tsx         # root layout — fonts, metadata, JSON-LD
 │   ├── page.tsx           # the single marketing page
 │   ├── globals.css
-│   ├── favicon.ico
-│   ├── sitemap.ts         # still served at /sitemap.xml
-│   └── robots.ts          # still served at /robots.txt
+│   └── sitemap.ts         # sitemap regex is unanchored, so this nests fine
 └── (payload)/             # new, from Payload's blank template
     ├── layout.tsx
     ├── admin/[[...segments]]/page.tsx + not-found.tsx
