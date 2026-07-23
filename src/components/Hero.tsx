@@ -7,8 +7,8 @@ import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
 import { META } from "@/lib/site";
 
 /**
- * Cinematic opening: the backdrop settles from a slow zoom while the
- * headline rises character by character out of line masks. The intro plays
+ * Cinematic opening: the headline rises character by character out of line
+ * masks while the backdrop holds still. The intro plays
  * on mount. On scroll the backdrop parallaxes at a slower rate than the
  * page and the foreground content drifts up and fades — the classic
  * "camera pulling away" beat.
@@ -20,18 +20,24 @@ export default function Hero() {
     (_, contextSafe) => {
       if (prefersReducedMotion()) return;
 
-      // — Intro timeline (plays on mount) —
-      const runIntro = contextSafe!(() => {
-        gsap.fromTo(
-          ".hero-img",
-          { scale: 1.28 },
-          { scale: 1, duration: 3, ease: "power2.out" }
-        );
+      // Hold the headline hidden until the web fonts are ready. Splitting
+      // before Fraunces has loaded lets autoSplit re-split on the font swap
+      // mid-animation — the stutter that briefly clipped the "p" in
+      // "Viewpoint". Hiding first also avoids a flash of the fallback font.
+      gsap.set([".hero-title", ".hero-fade"], { autoAlpha: 0 });
 
+      // — Intro timeline (plays once fonts are ready, on final metrics) —
+      const runIntro = contextSafe!(() => {
         SplitText.create(".hero-title", {
           type: "chars,lines",
           mask: "lines",
           autoSplit: true,
+          // Names the per-line mask elements .hero-line-mask-mask (GSAP's
+          // "-mask" suffix convention) so CSS can extend just the bottom of
+          // their overflow-clip box — freeing Fraunces' descenders without
+          // touching line-height, so the gap between "Sunrise" and "Viewpoint"
+          // stays at the h1's real leading-[0.92] throughout. See globals.css.
+          linesClass: "hero-line-mask",
           onSplit(self) {
             return gsap.from(self.chars, {
               yPercent: 120,
@@ -43,26 +49,23 @@ export default function Hero() {
             });
           },
         });
+        // Reveal the container now that the chars sit hidden below their masks.
+        gsap.set(".hero-title", { autoAlpha: 1 });
 
-        gsap.from(".hero-fade", {
-          y: 36,
-          autoAlpha: 0,
-          duration: 1.2,
-          ease: "power3.out",
-          stagger: 0.14,
-          delay: 1,
-        });
+        gsap.fromTo(
+          ".hero-fade",
+          { y: 36, autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            stagger: 0.14,
+            delay: 1,
+          }
+        );
       });
-      runIntro();
-
-      // — Scroll cue: gentle repeating pulse, origin top so it "grows" —
-      gsap.to(".hero-scroll-line", {
-        scaleY: 1.6,
-        duration: 1.6,
-        ease: "power1.inOut",
-        repeat: -1,
-        yoyo: true,
-      });
+      document.fonts.ready.then(runIntro);
 
       // — Scroll-scrubbed parallax —
       // The oversized wrapper (-inset-y-[12%]) gives the drift room to move
@@ -139,17 +142,6 @@ export default function Hero() {
             Call to book
           </a>
         </div>
-      </div>
-
-      {/* Scroll cue — fades with the rest of hero-content on scroll */}
-      <div
-        aria-hidden
-        className="hero-content hero-scroll-cue pointer-events-none absolute inset-x-0 bottom-6 flex flex-col items-center gap-3"
-      >
-        <span className="font-numeric text-[0.6rem] uppercase tracking-[0.2em] text-cream-dim">
-          Scroll
-        </span>
-        <span className="hero-scroll-line block h-12 w-px origin-top bg-cream/40" />
       </div>
     </section>
   );

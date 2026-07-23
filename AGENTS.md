@@ -15,10 +15,10 @@ A single-page marketing site for a real homestay client (not a demo). Read this 
 
 ## Images
 
-- Only one image lives in this repo: `public/images/hero-kanchenjunga.jpg` (the hero background, supplied by the client). **Don't change or replace this one** without being asked to.
-- Every other photo (rooms, About, gallery) is **curated Unsplash stock** — not real photos of this property. An earlier version hotlinked real but low-resolution photos scraped from third-party listing sites; that looked worse than honest stock photography, so don't reintroduce that pattern. Only `images.unsplash.com` is allowlisted in `next.config.ts`'s `images.remotePatterns`; adding a new remote image domain means adding it there too, or `next/image` will refuse to render it.
-- Before using any new photo URL (Unsplash or otherwise), verify it actually resolves (`curl -o /dev/null -w "%{http_code}" <url>`) rather than trusting a photo ID from memory — a wrong ID renders as a broken image with no build-time error.
-- Flag to whoever owns the project that these are stock, not the family's own photography — see README's TODO list.
+- **The client's own photographs live in `public/images/`**, each named for where it belongs (e.g. `four-occupancy.jpeg`, `Tent.jpeg`, `teestariverfromtop.jpg`, `hero-kanchenjunga.jpg`). These are the real property/region photos and back the Rooms, Experiences, and Gallery sections plus the hero. **Don't change or replace the hero (`hero-kanchenjunga.jpg`)** without being asked to.
+- A few slots still fall back to **curated Unsplash stock** where the client hasn't supplied a photo yet — currently the "Nights built for stargazing" experience and the "Light through the pines" / "A home-cooked spread" gallery captions. Each such entry says so in a comment in `site.ts`; swap it for a real photo when one arrives. Don't reintroduce the old pattern of hotlinking low-resolution photos scraped from third-party listing sites — that looked worse than honest stock.
+- Only `images.unsplash.com` is allowlisted in `next.config.ts`'s `images.remotePatterns`; adding a new *remote* image domain means adding it there too, or `next/image` will refuse to render it. Local `/images/…` files need no allowlisting.
+- Before using any new *remote* photo URL, verify it actually resolves (`curl -o /dev/null -w "%{http_code}" <url>`) rather than trusting a photo ID from memory — a wrong ID renders as a broken image with no build-time error. For local files, prefer web-safe names (no spaces) so the `/images/…` path never needs URL-encoding.
 
 ## Payload CMS
 

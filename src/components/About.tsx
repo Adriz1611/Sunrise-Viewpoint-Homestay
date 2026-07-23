@@ -22,8 +22,8 @@ export default function About() {
 
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <ParallaxImage
-            src="https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=1800&auto=format&fit=crop"
-            alt="Green ridgelines rolling toward a valley in soft light"
+            src="/images/the-homestay.jpg"
+            alt="The homestay's red-roofed cottages on the tea-garden ridge, layered hills and a cloud-filled valley beyond"
             sizes="(min-width: 1024px) 50vw, 100vw"
             speed={9}
             className="aspect-[4/5] rounded-2xl lg:aspect-auto lg:min-h-[560px]"

@@ -67,16 +67,15 @@ export const NAV_LINKS = [
 ];
 
 /**
- * Representative stock photography, not literal photos of these specific
- * rooms — the property doesn't have its own photo library online yet, and
- * the alternative (hotlinking modest-resolution photos from third-party
- * listing sites) looked worse than honest, high-quality stock. Swap for the
- * family's own photography whenever it's available; keep the tone (warm,
- * simple, mountain-homestay) rather than anything glossy or resort-like.
+ * The property's own photographs, supplied by the client (in public/images,
+ * named for where they belong). These are the three accommodation types the
+ * homestay offers — four-sharing rooms, six-sharing rooms, and camping tents,
+ * and nothing else. Keep the tone (warm, simple, mountain-homestay) if these
+ * are ever re-shot.
  */
 export const ACCOMMODATIONS = [
   {
-    name: "Standard Rooms",
+    name: "4-Sharing Rooms",
     count: "6 rooms",
     occupancy: "up to 4 guests per room",
     tagline:
@@ -87,25 +86,25 @@ export const ACCOMMODATIONS = [
       "Extra bedding on request",
       "Suited to couples & small families",
     ],
-    image:
-      "https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A simple, warmly lit mountain guesthouse room",
+    image: "/images/four-occupancy.jpeg",
+    imageAlt:
+      "A four-sharing room with two double beds under a wood-panelled ceiling, windows opening to the valley",
   },
   {
-    name: "Family Rooms",
+    name: "6-Sharing Rooms",
     count: "2 rooms",
     occupancy: "up to 6 guests per room",
     tagline:
       "Larger rooms that sleep up to six, for families and groups travelling together.",
     features: [
-      "Two beds, sleeps up to 6",
+      "Three beds, sleeps up to 6",
       "Attached bath, hot water",
-      "Tea-garden views",
+      "Mountain-facing windows",
       "Best value for groups",
     ],
-    image:
-      "https://images.unsplash.com/photo-1611892440504-42a792e24d32?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A simple warm-toned guesthouse bedroom with wooden furniture",
+    image: "/images/six-person-occupancy.jpeg",
+    imageAlt:
+      "A spacious six-sharing room with three beds and wide windows framing the mountains",
   },
   {
     name: "Camping Tents",
@@ -119,24 +118,25 @@ export const ACCOMMODATIONS = [
       "Larger tents for groups on request",
       "Best for first light at 5:30 AM",
     ],
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "View of pine forest through an open tent flap",
+    image: "/images/Tent.jpeg",
+    imageAlt:
+      "Tents pitched on the open ridge with the snow peaks of the range on the horizon",
   },
 ];
 
 /**
  * Experience facts are from the client's info sheet (distances, altitudes,
- * seasons) — the images are representative Unsplash stock of each subject
- * (see the note above ACCOMMODATIONS), each URL verified to resolve.
+ * seasons). Images are the property's own photographs (public/images), except
+ * "Nights built for stargazing", which stays on verified Unsplash stock — the
+ * client hasn't supplied a night-sky photo yet. Swap it when one arrives.
  */
 export const EXPERIENCES = [
   {
-    title: "Sunrise over Kanchenjunga",
-    body: "A 180° panorama of the Kanchenjunga range at first light, visible straight from the rooms. It is what the homestay is named for.",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "First light striking high snow peaks",
+    title: "Sunrise from the hotel",
+    body: "First light straight from the homestay — the sun coming up over the ridge and the tents, the Kanchenjunga range catching the earliest colour. It is what the homestay is named for.",
+    image: "/images/Sunrise.jpg",
+    imageAlt:
+      "The sun rising beside the homestay, camping tents and prayer flags on the ridge in the morning light",
   },
   {
     title: "Nights built for stargazing",
@@ -148,51 +148,47 @@ export const EXPERIENCES = [
   {
     title: "Namthing Pokhari",
     body: "A pine-ringed lake ≈2 km away at nearly 4,000 ft, home to the endangered Himalayan salamander. Best June–September, when the monsoon greens the forest.",
-    image:
-      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A still lake ringed by dark forest",
+    image: "/images/NamthingPokhari.jpg",
+    imageAlt:
+      "Namthing Pokhari lake ringed by pine forest in the monsoon rain, a tall Hanuman statue and saffron flags on its bank",
   },
   {
     title: "Birding in Latpanchar",
     body: "Inside the Mahananda Wildlife Sanctuary, ≈5 km away at ≈4,200 ft. Home to over 200 bird species, including the rufous-necked hornbill. Best October–April.",
-    image:
-      "https://images.unsplash.com/photo-1444464666168-49d633b86797?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A bright forest bird perched on a branch",
+    image: "/images/BirdinginLatpanchar.jpg",
+    imageAlt:
+      "A yellow-and-green sunbird feeding on orange flowers in the forest",
   },
   {
     title: "Sittong's orange orchards",
     body: "≈2 km down the ridge, the \"Orange Village of West Bengal\" turns amber October–February, peaking from late December to February.",
-    image:
-      "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "Oranges ripening on the branch",
+    image: "/images/SittongOraneOrchards.jpg",
+    imageAlt: "Ripe oranges hanging among dark green leaves on the tree",
   },
   {
     title: "The Teesta below",
     body: "On clear days, the Teesta river's emerald-green thread is visible in the valley far below. The view shifts with the weather through the day.",
-    // Kept as representative stock (no better-matching river-valley
-    // candidate was found — see agent notes); this remains a generic
-    // river-valley stand-in rather than the actual Teesta.
-    image:
-      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "A river threading through a forested valley",
+    image: "/images/teestariverfromtop.jpg",
+    imageAlt:
+      "The emerald-green Teesta river winding through the forested valley far below",
   },
 ];
 
 /**
- * Representative stock photography of the region (Darjeeling hills / Eastern
- * Himalaya), not literal photos of this property — see the note above
- * ACCOMMODATIONS for why. Swap for the family's own photography when
- * available.
+ * The property's own photographs (public/images, named for their captions),
+ * except "Light through the pines" and "A home-cooked spread", which stay on
+ * verified Unsplash stock — the client hasn't supplied photos for those two
+ * captions yet. Swap them in when they arrive.
  */
 export const GALLERY = [
   {
-    src: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&w=1800&auto=format&fit=crop",
-    alt: "Fog rolling over forested hills at dawn",
+    src: "/images/morningontheridge.jpg",
+    alt: "Visitors on the grassy ridgeline above a sea of clouds at dawn",
     caption: "Morning on the ridge",
   },
   {
-    src: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1800&auto=format&fit=crop",
-    alt: "Snow peaks of the high Himalaya",
+    src: "/images/Thehighrangecleardayview.jpg",
+    alt: "The snow-capped high range across the hills, seen from a tent doorway on a clear day",
     caption: "The high range, clear-day view",
   },
   {
@@ -206,15 +202,15 @@ export const GALLERY = [
     caption: "A home-cooked spread",
   },
   {
-    src: "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?q=80&w=1800&auto=format&fit=crop",
-    alt: "A cup of dark tea beside loose dried tea leaves",
+    src: "/images/teafromthehills.jpg",
+    alt: "A glass cup of amber tea held up against a misty, tea-covered hillside",
     caption: "Tea from the hills",
   },
   // Kept last on purpose: the gallery's full-bleed panorama slot — give it
   // a landscape, not an interior.
   {
-    src: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1800&auto=format&fit=crop",
-    alt: "Sun rising over rolling ridgelines",
+    src: "/images/firstlightoverthehills.jpg",
+    alt: "Tents on a tea-covered ridge at dawn, distant snow peaks catching first light over rolling hills",
     caption: "First light over the hills",
   },
 ];
@@ -225,11 +221,6 @@ export const GALLERY = [
  * current rates by phone before publishing, as these can change seasonally.
  */
 export const TARIFF = [
-  {
-    name: "Double sharing",
-    price: "₹1,600",
-    unit: "per person / night",
-  },
   {
     name: "Triple sharing",
     price: "₹1,500",

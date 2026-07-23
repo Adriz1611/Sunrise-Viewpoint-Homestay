@@ -118,6 +118,21 @@ html.lenis body {
   overflow: hidden;
 }
 
+/* Hero.tsx's SplitText reveal wraps each headline line in an overflow-clip
+   box (class ".hero-line-mask-mask"). That box is sized to the h1's tight
+   leading-[0.92], which is shorter than Fraunces' descenders — so the "p" in
+   "Viewpoint" is sheared off for the duration of the reveal.
+   Extend ONLY the bottom of the clip region (padding-bottom grows the
+   overflow-clip edge downward) and cancel the added height with an equal
+   negative margin, so the descender is freed while line-height — and thus the
+   gap between "Sunrise" and "Viewpoint" — stays put both during the reveal and
+   after revert() removes the mask. Touching line-height instead would make the
+   lines drift apart mid-reveal and snap back on settle. */
+.hero-line-mask-mask {
+  padding-bottom: 0.2em;
+  margin-bottom: -0.2em;
+}
+
 /* Filmic grain overlay (hero) */
 .grain::after {
   content: "";
