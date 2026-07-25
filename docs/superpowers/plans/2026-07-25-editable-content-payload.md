@@ -1228,7 +1228,7 @@ import { useLivePreview } from "@payloadcms/live-preview-react";
  * data — every other section keeps its server-fetched props, which would
  * otherwise be overwritten with fields from a different global.
  */
-export function useSectionPreview<T extends Record<string, unknown>>(
+export function useSectionPreview<T extends Record<string, any>>(
   slug: string,
   initialData: T
 ): T {
