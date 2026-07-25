@@ -761,7 +761,7 @@ export const getSiteSettings = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.bookingPhones?.[0]?.number, "site-settings");
+  if (!draft) assertPopulated(doc.bookingPhones?.[0]?.number, "site-settings");
   return doc;
 });
 ```
@@ -1039,7 +1039,7 @@ export const getHero = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.headlineLine1, "hero");
+  if (!draft) assertPopulated(doc.headlineLine1, "hero");
   return doc;
 });
 ```
@@ -1458,7 +1458,7 @@ export const getRooms = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.items?.[0]?.name, "rooms");
+  if (!draft) assertPopulated(doc.items?.[0]?.name, "rooms");
   return doc;
 });
 ```
@@ -1691,7 +1691,7 @@ export const getExperiences = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.items?.[0]?.title, "experiences");
+  if (!draft) assertPopulated(doc.items?.[0]?.title, "experiences");
   return doc;
 });
 ```
@@ -1904,7 +1904,7 @@ export const getGallery = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.photos?.[0]?.caption, "gallery");
+  if (!draft) assertPopulated(doc.photos?.[0]?.caption, "gallery");
   return doc;
 });
 ```
@@ -2134,7 +2134,7 @@ export const getTariff = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.rates?.[0]?.name, "tariff");
+  if (!draft) assertPopulated(doc.rates?.[0]?.name, "tariff");
   return doc;
 });
 ```
