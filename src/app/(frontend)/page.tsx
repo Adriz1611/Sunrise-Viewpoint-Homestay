@@ -12,11 +12,14 @@ import Rooms from "@/components/Rooms";
 import SmoothScroll from "@/components/SmoothScroll";
 import Tariff from "@/components/Tariff";
 import Testimonials from "@/components/Testimonials";
-import { getSiteSettings } from "@/lib/content";
+import { getHero, getSiteSettings } from "@/lib/content";
 
 export default async function Home() {
   const { isEnabled: draft } = await draftMode();
-  const settings = await getSiteSettings(draft);
+  const [settings, hero] = await Promise.all([
+    getSiteSettings(draft),
+    getHero(draft),
+  ]);
 
   return (
     <>
@@ -29,7 +32,7 @@ export default async function Home() {
       </a>
       <Nav phones={settings.bookingPhones} />
       <main id="main">
-        <Hero meta={settings} />
+        <Hero data={hero} meta={settings} />
         <Marquee />
         <About />
         <Rooms />

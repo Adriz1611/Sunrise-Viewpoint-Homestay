@@ -27,3 +27,15 @@ export const getSiteSettings = cache(async (draft: boolean) => {
   assertPopulated(doc.bookingPhones?.[0]?.number, "site-settings");
   return doc;
 });
+
+export const getHero = cache(async (draft: boolean) => {
+  const payload = await getPayload({ config });
+  const doc = await payload.findGlobal({
+    slug: "hero",
+    draft,
+    depth: 1,
+    overrideAccess: draft,
+  });
+  assertPopulated(doc.headlineLine1, "hero");
+  return doc;
+});

@@ -4,9 +4,11 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
-import type { SiteSetting } from "@/payload-types";
+import { mediaProps } from "@/lib/media";
+import type { Hero as HeroData, SiteSetting } from "@/payload-types";
 
 type HeroProps = {
+  data: HeroData;
   meta: Pick<SiteSetting, "coordinates" | "altitude" | "region">;
 };
 
@@ -17,8 +19,9 @@ type HeroProps = {
  * page and the foreground content drifts up and fades — the classic
  * "camera pulling away" beat.
  */
-export default function Hero({ meta }: HeroProps) {
+export default function Hero({ data, meta }: HeroProps) {
   const root = useRef<HTMLElement>(null);
+  const backdrop = mediaProps(data.backgroundImage, "hero.backgroundImage");
 
   useGSAP(
     (_, contextSafe) => {
@@ -109,8 +112,8 @@ export default function Hero({ meta }: HeroProps) {
       {/* Backdrop */}
       <div className="hero-img-wrap absolute inset-x-0 -inset-y-[12%]">
         <Image
-          src="/images/hero-kanchenjunga.jpg"
-          alt="The Kanchenjunga range catching first light at sunrise"
+          src={backdrop.src}
+          alt={backdrop.alt}
           fill
           priority
           sizes="100vw"
@@ -129,21 +132,23 @@ export default function Hero({ meta }: HeroProps) {
         </p>
 
         <h1 className="hero-title font-display text-[clamp(3.2rem,11vw,9.5rem)] leading-[0.92] tracking-tight text-cream">
-          Sunrise
+          {data.headlineLine1}
           <br />
-          Viewpoint<span className="text-teal">.</span>
+          {data.headlineLine2}
+          {data.headlineAccent ? (
+            <span className="text-teal">{data.headlineAccent}</span>
+          ) : null}
         </h1>
 
         <div className="mt-8 flex flex-col justify-between gap-8 sm:mt-12 sm:flex-row sm:items-end">
           <p className="hero-fade max-w-md text-base leading-relaxed text-cream-dim sm:text-lg">
-            A family-run homestay on the Aahaldara ridge, with a 180° sunrise
-            view of the Kanchenjunga range and the Teesta valley far below.
+            {data.subhead}
           </p>
           <a
             href="#tariff"
             className="hero-fade inline-block shrink-0 self-start rounded-full bg-cream px-7 py-3.5 text-sm font-semibold text-ink transition-[transform,color,background-color] duration-200 hover:bg-celadon active:scale-[0.97] sm:self-auto"
           >
-            Call to book
+            {data.ctaLabel}
           </a>
         </div>
       </div>

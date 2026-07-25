@@ -88,9 +88,11 @@ export interface Config {
   };
   fallbackLocale: null;
   globals: {
+    hero: Hero;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    hero: HeroSelect<false> | HeroSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
@@ -321,6 +323,37 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero".
+ */
+export interface Hero {
+  id: number;
+  /**
+   * The full-screen opening photograph. Use a wide landscape — it is cropped to fill the whole screen on every device.
+   */
+  backgroundImage: number | Media;
+  /**
+   * First line of the big headline, e.g. Sunrise
+   */
+  headlineLine1: string;
+  /**
+   * Second line of the big headline, e.g. Viewpoint
+   */
+  headlineLine2: string;
+  /**
+   * A one-character flourish shown in teal after the headline, normally a full stop. Leave empty for none.
+   */
+  headlineAccent?: string | null;
+  subhead: string;
+  /**
+   * Text on the button, e.g. Call to book. The button always jumps to the Tariff section.
+   */
+  ctaLabel: string;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -363,6 +396,22 @@ export interface SiteSetting {
   _status?: ('draft' | 'published') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hero_select".
+ */
+export interface HeroSelect<T extends boolean = true> {
+  backgroundImage?: T;
+  headlineLine1?: T;
+  headlineLine2?: T;
+  headlineAccent?: T;
+  subhead?: T;
+  ctaLabel?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
