@@ -1249,6 +1249,42 @@ export function useSectionPreview<T extends Record<string, any>>(
 }
 ```
 
+> **Correction applied during implementation (commit 4a3c9be).** Two defects in the code above were
+> found and fixed while implementing this task:
+> 1. The `?preview=<slug>` gate alone is **not sufficient**. `@payloadcms/live-preview` keeps one
+>    module-level `previousData` shared by every subscriber and returns it for any non-data message,
+>    including the `payload-document-event` the admin posts on save — so a second subscriber could be
+>    handed a different global's document and crash. The gate must also assert
+>    `data?.globalType === slug`. (`data.id` cannot be used: every global has `id: 1`.)
+> 2. The `useEffect` + `setState` slug read fails lint — `eslint-config-next@16.2.6` ships
+>    `react-hooks/set-state-in-effect` as an error. Use `useSyncExternalStore` with a `false` server
+>    snapshot instead: same semantics, no hydration mismatch, still no server-side `searchParams`.
+>
+> 3. `serverURL: process.env.NEXT_PUBLIC_SERVER_URL ?? ""` **crashes the public homepage.**
+>    `useLivePreview` calls `ready()` in its mount effect, which does `postMessage(msg, serverURL)`;
+>    `""` is not a valid `targetOrigin`, so it throws a `SyntaxError` out of an effect and Next's
+>    error boundary replaces the page — for every visitor, not just previewers. The env var is now
+>    normalised once in `src/lib/preview.ts` (`new URL(raw).origin`, `null` when unset/invalid) and
+>    both call sites use it: the client falls back to `window.location.origin`, the admin config to
+>    `http://localhost:3000`.
+> 4. **`isTarget` (the `?preview=<slug>` check) was dropped entirely.** `data.globalType === slug`
+>    discriminates on a property of the payload itself, so the query-string check adds no protection
+>    and is the only thing that can reject *valid* data — if the admin SPA-navigates between globals
+>    without reloading the iframe, `?preview=hero` persists while `rooms` is edited and preview
+>    silently stops updating. Dropping it removes `useSyncExternalStore` and the hydration reasoning
+>    from the hook, so item 2 above no longer applies to the shipped code.
+> 5. **Throwing helpers must not be reachable from preview form state.** Drafts skip required-field
+>    validation, so clearing the hero upload posts `backgroundImage: null` on both the client
+>    (keystroke data) and the server (draft render) — and `mediaProps` threw, killing the pane until
+>    reload. An error boundary cannot fix this: the throw unmounts the subscriber, so the pane stays
+>    dead. Instead the *purpose* of that throw — catching a forgotten `depth: 1` — moved to
+>    `assertMediaPopulated` in `src/lib/content.ts`, which throws only when an upload arrives as a
+>    bare id. `mediaProps` now returns a neutral ink placeholder for an empty field. **Tasks 6–9 need
+>    no per-section handling for this**; they inherit it.
+>
+> See `src/lib/useSectionPreview.ts`, `src/lib/preview.ts`, `src/lib/media.ts` and
+> `src/lib/content.ts` for the shipped versions.
+
 - [ ] **Step 4: Subscribe the hero**
 
 In `src/components/Hero.tsx`, add the import and replace the first line of the component body:

@@ -1,4 +1,5 @@
 import type { GlobalConfig } from "payload";
+import { serverOriginFromEnv } from "@/lib/preview";
 
 type GlobalLivePreview = NonNullable<NonNullable<GlobalConfig["admin"]>["livePreview"]>;
 
@@ -12,7 +13,7 @@ export function livePreviewFor(slug: string): GlobalLivePreview {
   return {
     openByDefault: true,
     url: () => {
-      const base = process.env.NEXT_PUBLIC_SERVER_URL ?? "http://localhost:3000";
+      const base = serverOriginFromEnv() ?? "http://localhost:3000";
       const secret = process.env.PREVIEW_SECRET ?? "";
       return `${base}/next/preview?secret=${encodeURIComponent(
         secret
