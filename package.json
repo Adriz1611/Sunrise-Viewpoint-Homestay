@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@payloadcms/db-postgres": "3.86.0",
+    "@payloadcms/live-preview-react": "^3.86.0",
     "@payloadcms/next": "3.86.0",
     "@payloadcms/richtext-lexical": "3.86.0",
     "@payloadcms/ui": "3.86.0",
@@ -31,8 +33,7 @@
     "payload": "3.86.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "sharp": "0.34.2",
-    "@payloadcms/db-postgres": "3.86.0"
+    "sharp": "0.34.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
