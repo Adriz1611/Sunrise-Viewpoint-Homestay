@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
 import { mediaProps } from "@/lib/media";
+import { useSectionPreview } from "@/lib/useSectionPreview";
 import type { Hero as HeroData, SiteSetting } from "@/payload-types";
 
 type HeroProps = {
@@ -19,7 +20,8 @@ type HeroProps = {
  * page and the foreground content drifts up and fades — the classic
  * "camera pulling away" beat.
  */
-export default function Hero({ data, meta }: HeroProps) {
+export default function Hero({ data: initialData, meta }: HeroProps) {
+  const data = useSectionPreview("hero", initialData);
   const root = useRef<HTMLElement>(null);
   const backdrop = mediaProps(data.backgroundImage, "hero.backgroundImage");
 
