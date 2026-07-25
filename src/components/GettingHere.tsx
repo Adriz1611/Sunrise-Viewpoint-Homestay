@@ -1,14 +1,14 @@
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import { ArrowUpRight } from "@/components/icons";
-import {
-  MAP_DIRECTIONS_URL,
-  MAP_EMBED_SRC,
-  ROUTES,
-  TRANSPORT_CONTACT,
-} from "@/lib/site";
+import { MAP_DIRECTIONS_URL, MAP_EMBED_SRC, ROUTES } from "@/lib/site";
+import { telHref } from "@/lib/phone";
 
-export default function GettingHere() {
+type GettingHereProps = {
+  transport: { name: string; phones: { number: string }[] };
+};
+
+export default function GettingHere({ transport }: GettingHereProps) {
   return (
     <section
       id="getting-here"
@@ -58,13 +58,13 @@ export default function GettingHere() {
                   Transport bookings
                 </p>
                 <p className="font-display mt-2 text-lg text-cream">
-                  {TRANSPORT_CONTACT.name}
+                  {transport.name}
                 </p>
                 <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t keyline pt-4">
-                  {TRANSPORT_CONTACT.phones.map((phone) => (
+                  {transport.phones.map((phone) => (
                     <a
                       key={phone.number}
-                      href={phone.href}
+                      href={telHref(phone.number)}
                       className="font-numeric whitespace-nowrap text-base text-cream transition-colors hover:text-celadon"
                     >
                       {phone.number}

@@ -1,9 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CONTACT, NAV_LINKS } from "@/lib/site";
+import { NAV_LINKS } from "@/lib/site";
+import { telHref } from "@/lib/phone";
+import type { SiteSetting } from "@/payload-types";
 
-export default function Nav() {
+type NavProps = {
+  phones: NonNullable<SiteSetting["bookingPhones"]>;
+};
+
+export default function Nav({ phones }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const hamburgerRef = useRef<HTMLButtonElement>(null);
@@ -88,10 +94,10 @@ export default function Nav() {
         </ul>
 
         <a
-          href={CONTACT.phones[0].href}
+          href={telHref(phones![0].number)}
           className="font-numeric hidden whitespace-nowrap rounded-full border keyline px-4 py-2 text-sm text-cream transition-[transform,color,border-color] duration-200 hover:border-teal hover:text-celadon active:scale-[0.97] lg:block"
         >
-          {CONTACT.phones[0].number}
+          {phones![0].number}
         </a>
 
         {/* Mobile menu button */}
@@ -148,11 +154,11 @@ export default function Nav() {
           ))}
           <li className="mt-8">
             <a
-              href={CONTACT.phones[0].href}
+              href={telHref(phones![0].number)}
               onClick={closeMenu}
               className="font-numeric text-xl text-celadon"
             >
-              {CONTACT.phones[0].number}
+              {phones![0].number}
             </a>
           </li>
         </ul>

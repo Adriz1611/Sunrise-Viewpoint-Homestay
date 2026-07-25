@@ -2,13 +2,14 @@ import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import {
   ACCOMMODATIONS,
-  CONTACT,
   MEALS_EXTRA,
   MEALS_INCLUDED,
   STAY_INFO,
   TARIFF,
   TARIFF_NOTES,
 } from "@/lib/site";
+import { telHref } from "@/lib/phone";
+import type { SiteSetting } from "@/payload-types";
 
 // Quick-glance highlights for the chip row below — derived only from facts
 // already present in site.ts (MEALS_INCLUDED, ACCOMMODATIONS features).
@@ -20,7 +21,11 @@ const TARIFF_HIGHLIGHTS = [
   ...(HOT_WATER ? ["Hot water in every room"] : []),
 ];
 
-export default function Tariff() {
+type TariffProps = {
+  phones: NonNullable<SiteSetting["bookingPhones"]>;
+};
+
+export default function Tariff({ phones }: TariffProps) {
   return (
     <section id="tariff" className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
@@ -138,10 +143,10 @@ export default function Tariff() {
               </div>
 
               <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                {CONTACT.phones.map((phone, i) => (
+                {phones.map((phone, i) => (
                   <a
                     key={phone.number}
-                    href={phone.href}
+                    href={telHref(phone.number)}
                     className={`font-numeric whitespace-nowrap rounded-full px-8 py-4 text-center text-xl transition-[transform,color,background-color,border-color] duration-200 active:scale-[0.97] sm:text-2xl ${
                       i === 0
                         ? "bg-cream text-ink hover:bg-celadon"

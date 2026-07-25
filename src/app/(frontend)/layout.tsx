@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope, Space_Grotesk } from "next/font/google";
-import { SITE_URL, META, CONTACT, TARIFF } from "@/lib/site";
+import { draftMode } from "next/headers";
+import { SITE_URL, TARIFF } from "@/lib/site";
+import { getSiteSettings } from "@/lib/content";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -75,13 +77,16 @@ export const viewport: Viewport = {
   themeColor: "#021c1b",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { isEnabled: draft } = await draftMode();
+  const settings = await getSiteSettings(draft);
+
   // Parse coordinates from "26.9369° N, 88.4039° E" format
-  const coordParts = META.coordinates.match(/[\d.]+/g) || [];
+  const coordParts = settings.coordinates.match(/[\d.]+/g) || [];
   const latitude = parseFloat(coordParts[0] ?? "26.9369");
   const longitude = parseFloat(coordParts[1] ?? "88.4039");
 
@@ -98,9 +103,10 @@ export default function RootLayout({
     name: siteName,
     description: siteDescription,
     url: SITE_URL,
-    telephone: CONTACT.phones[0].number,
+    telephone: settings.bookingPhones![0].number,
     address: {
       "@type": "PostalAddress",
+      streetAddress: settings.address,
       addressLocality: "Sittong III",
       addressRegion: "West Bengal",
       addressCountry: "IN",

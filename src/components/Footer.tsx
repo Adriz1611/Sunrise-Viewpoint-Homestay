@@ -6,9 +6,15 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import AnimatedTitle from "@/components/AnimatedTitle";
 import Reveal from "@/components/Reveal";
 import { Star } from "@/components/icons";
-import { CONTACT, GOOGLE_REVIEWS, META, TRANSPORT_CONTACT } from "@/lib/site";
+import { GOOGLE_REVIEWS } from "@/lib/site";
+import { telHref } from "@/lib/phone";
+import type { SiteSetting } from "@/payload-types";
 
-export default function Footer() {
+type FooterProps = {
+  settings: SiteSetting;
+};
+
+export default function Footer({ settings }: FooterProps) {
   const root = useRef<HTMLDivElement>(null);
   const year = new Date().getFullYear();
 
@@ -117,10 +123,10 @@ export default function Footer() {
               Bookings
             </h3>
             <div className="mt-4 space-y-3">
-              {CONTACT.phones.map((phone) => (
+              {settings.bookingPhones.map((phone) => (
                 <a
                   key={phone.number}
-                  href={phone.href}
+                  href={telHref(phone.number)}
                   className="font-numeric block whitespace-nowrap text-2xl text-cream transition-colors hover:text-celadon lg:text-3xl"
                 >
                   {phone.number}
@@ -133,12 +139,12 @@ export default function Footer() {
             <h3 className="text-xs uppercase tracking-[0.2em] text-cream-dim">
               Transport & pickup
             </h3>
-            <p className="mt-4 text-sm text-cream-dim">{TRANSPORT_CONTACT.name}</p>
+            <p className="mt-4 text-sm text-cream-dim">{settings.transportName}</p>
             <div className="mt-2 space-y-1.5">
-              {TRANSPORT_CONTACT.phones.map((phone) => (
+              {settings.transportPhones.map((phone) => (
                 <a
                   key={phone.number}
-                  href={phone.href}
+                  href={telHref(phone.number)}
                   className="font-numeric block text-lg text-cream transition-colors hover:text-celadon"
                 >
                   {phone.number}
@@ -152,10 +158,10 @@ export default function Footer() {
               Find us
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-cream-dim">
-              {CONTACT.address}
+              {settings.address}
             </p>
             <p className="font-numeric mt-3 text-xs tracking-[0.15em] text-cream-dim">
-              {META.coordinates}
+              {settings.coordinates}
             </p>
             <a
               href={GOOGLE_REVIEWS.url}
@@ -175,7 +181,7 @@ export default function Footer() {
         <div className="mt-16 flex flex-col items-start justify-between gap-3 border-t keyline pt-6 text-xs text-cream-dim sm:flex-row sm:items-center">
           <p>© {year} Sunrise Viewpoint Homestay, Aahaldara. All rights reserved.</p>
           <p className="font-numeric">
-            Alt. {META.altitude} — first light 05:30 IST
+            Alt. {settings.altitude} — first light 05:30 IST
           </p>
         </div>
       </div>

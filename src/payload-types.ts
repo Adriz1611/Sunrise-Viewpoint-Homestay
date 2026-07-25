@@ -87,8 +87,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -314,6 +318,79 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * The FIRST number in this list is the one shown in the site header, the floating call button, and Google's search listing. Drag to reorder.
+   */
+  bookingPhones: {
+    /**
+     * For example "Bookings" or "Bookings (alt.)".
+     */
+    label: string;
+    /**
+     * Write it the way it should appear, e.g. +91 98006 37784. The tap-to-call link is generated automatically.
+     */
+    number: string;
+    id?: string | null;
+  }[];
+  /**
+   * The local driver shown in Getting Here and the footer — not the homestay itself.
+   */
+  transportName: string;
+  transportPhones: {
+    number: string;
+    id?: string | null;
+  }[];
+  /**
+   * Shown in the hero and footer, and parsed into the site's map metadata for Google. Keep the format "26.9369° N, 88.4039° E".
+   */
+  coordinates: string;
+  /**
+   * Approximate values keep the "≈" prefix rather than presenting a guess as certain.
+   */
+  altitude: string;
+  region: string;
+  /**
+   * Shown in the footer and in the site's search-engine metadata.
+   */
+  address: string;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  bookingPhones?:
+    | T
+    | {
+        label?: T;
+        number?: T;
+        id?: T;
+      };
+  transportName?: T;
+  transportPhones?:
+    | T
+    | {
+        number?: T;
+        id?: T;
+      };
+  coordinates?: T;
+  altitude?: T;
+  region?: T;
+  address?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

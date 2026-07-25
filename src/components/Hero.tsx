@@ -4,7 +4,11 @@ import Image from "next/image";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
-import { META } from "@/lib/site";
+import type { SiteSetting } from "@/payload-types";
+
+type HeroProps = {
+  meta: Pick<SiteSetting, "coordinates" | "altitude" | "region">;
+};
 
 /**
  * Cinematic opening: the headline rises character by character out of line
@@ -13,7 +17,7 @@ import { META } from "@/lib/site";
  * page and the foreground content drifts up and fades — the classic
  * "camera pulling away" beat.
  */
-export default function Hero() {
+export default function Hero({ meta }: HeroProps) {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -117,11 +121,11 @@ export default function Hero() {
 
       <div className="hero-content relative mx-auto w-full max-w-7xl px-5 pb-14 pt-40 sm:px-8 sm:pb-20">
         <p className="hero-fade font-numeric mb-6 flex flex-wrap items-center gap-x-5 gap-y-1 text-[0.7rem] uppercase tracking-[0.2em] text-dawn/90 sm:text-xs">
-          <span>{META.coordinates}</span>
+          <span>{meta.coordinates}</span>
           <span aria-hidden className="hidden h-px w-8 bg-dawn/40 sm:block" />
-          <span>Alt. {META.altitude}</span>
+          <span>Alt. {meta.altitude}</span>
           <span aria-hidden className="hidden h-px w-8 bg-dawn/40 sm:block" />
-          <span>{META.region}</span>
+          <span>{meta.region}</span>
         </p>
 
         <h1 className="hero-title font-display text-[clamp(3.2rem,11vw,9.5rem)] leading-[0.92] tracking-tight text-cream">

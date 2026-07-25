@@ -1,3 +1,4 @@
+import { draftMode } from "next/headers";
 import About from "@/components/About";
 import CallPill from "@/components/CallPill";
 import Experiences from "@/components/Experiences";
@@ -11,8 +12,12 @@ import Rooms from "@/components/Rooms";
 import SmoothScroll from "@/components/SmoothScroll";
 import Tariff from "@/components/Tariff";
 import Testimonials from "@/components/Testimonials";
+import { getSiteSettings } from "@/lib/content";
 
-export default function Home() {
+export default async function Home() {
+  const { isEnabled: draft } = await draftMode();
+  const settings = await getSiteSettings(draft);
+
   return (
     <>
       <SmoothScroll />
@@ -22,20 +27,25 @@ export default function Home() {
       >
         Skip to content
       </a>
-      <Nav />
+      <Nav phones={settings.bookingPhones} />
       <main id="main">
-        <Hero />
+        <Hero meta={settings} />
         <Marquee />
         <About />
         <Rooms />
         <Experiences />
         <Gallery />
-        <Tariff />
+        <Tariff phones={settings.bookingPhones} />
         <Testimonials />
-        <GettingHere />
+        <GettingHere
+          transport={{
+            name: settings.transportName,
+            phones: settings.transportPhones ?? [],
+          }}
+        />
       </main>
-      <Footer />
-      <CallPill />
+      <Footer settings={settings} />
+      <CallPill phone={settings.bookingPhones![0]} />
     </>
   );
 }

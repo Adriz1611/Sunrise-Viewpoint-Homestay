@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CONTACT } from "@/lib/site";
+import { telHref } from "@/lib/phone";
+
+type CallPillProps = {
+  phone: { number: string };
+};
 
 /**
  * Mobile-only sticky call button — the site's sole conversion path should
@@ -9,7 +13,7 @@ import { CONTACT } from "@/lib/site";
  * has scrolled out of view. Hidden at/above the hero via IntersectionObserver
  * on #top, and hidden entirely on lg+ where the Nav phone pill is visible.
  */
-export default function CallPill() {
+export default function CallPill({ phone }: CallPillProps) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -25,7 +29,7 @@ export default function CallPill() {
 
   return (
     <a
-      href={CONTACT.phones[0].href}
+      href={telHref(phone.number)}
       aria-label="Call Sunrise Viewpoint Homestay"
       className={`fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex min-h-[44px] items-center gap-2 rounded-full bg-teal px-5 py-3 font-medium text-ink transition-[transform,opacity] duration-300 active:scale-[0.97] lg:hidden ${
         visible
