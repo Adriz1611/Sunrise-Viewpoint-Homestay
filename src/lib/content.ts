@@ -55,3 +55,15 @@ export const getHero = cache(async (draft: boolean) => {
   if (!draft) assertPopulated(doc.headlineLine1, "hero");
   return doc;
 });
+
+export const getRooms = cache(async (draft: boolean) => {
+  const payload = await getPayload({ config });
+  const doc = await payload.findGlobal({
+    slug: "rooms",
+    draft,
+    depth: 1,
+    overrideAccess: draft,
+  });
+  if (!draft) assertPopulated(doc.items?.[0]?.name, "rooms");
+  return doc;
+});

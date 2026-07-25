@@ -3,6 +3,7 @@ import config from "@payload-config";
 import { seedMedia } from "./media";
 import { seedSiteSettings } from "./siteSettings";
 import { seedHero } from "./hero";
+import { seedRooms } from "./rooms";
 
 async function seed() {
   const payload = await getPayload({ config });
@@ -10,6 +11,7 @@ async function seed() {
   payload.logger.info(`seed: ${Object.keys(media).length} media documents ready`);
   await seedSiteSettings(payload);
   await seedHero(payload, media);
+  await seedRooms(payload, media);
   payload.logger.info("seed: done");
   process.exit(0);
 }

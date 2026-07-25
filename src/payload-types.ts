@@ -89,10 +89,12 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     hero: Hero;
+    rooms: Room;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
     hero: HeroSelect<false> | HeroSelect<true>;
+    rooms: RoomsSelect<false> | RoomsSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
@@ -354,6 +356,47 @@ export interface Hero {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rooms".
+ */
+export interface Room {
+  id: number;
+  /**
+   * Section heading. Wrap one word in *asterisks* to show it in the celadon accent, e.g. All of them face *east*. NOTE: this heading mentions how many rooms there are — update it if you add or remove a room below.
+   */
+  title: string;
+  /**
+   * At least one room type is required. Drag to reorder — this is the order guests scroll through.
+   */
+  items: {
+    /**
+     * e.g. "4-Sharing Rooms"
+     */
+    name: string;
+    /**
+     * e.g. "6 rooms" or "pitched on request"
+     */
+    count: string;
+    /**
+     * e.g. "up to 4 guests per room"
+     */
+    occupancy: string;
+    tagline: string;
+    /**
+     * Short chips shown under the description.
+     */
+    features: {
+      value: string;
+      id?: string | null;
+    }[];
+    image: number | Media;
+    id?: string | null;
+  }[];
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -408,6 +451,33 @@ export interface HeroSelect<T extends boolean = true> {
   headlineAccent?: T;
   subhead?: T;
   ctaLabel?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rooms_select".
+ */
+export interface RoomsSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        name?: T;
+        count?: T;
+        occupancy?: T;
+        tagline?: T;
+        features?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+        image?: T;
+        id?: T;
+      };
   _status?: T;
   updatedAt?: T;
   createdAt?: T;
