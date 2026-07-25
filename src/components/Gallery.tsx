@@ -1,44 +1,50 @@
+"use client";
+
 import ParallaxImage from "@/components/ParallaxImage";
 import SectionHeading from "@/components/SectionHeading";
-import { GALLERY } from "@/lib/site";
+import { galleryCell } from "@/lib/gallery-layout";
+import { renderEmphasis } from "@/lib/emphasis";
+import { mediaProps } from "@/lib/media";
+import { useSectionPreview } from "@/lib/useSectionPreview";
+import type { Gallery as GalleryData } from "@/payload-types";
+
+type GalleryProps = { data: GalleryData };
 
 /**
  * Editorial mosaic: aligned rows with deliberately unequal column widths
  * (7/5, then 4/4/4, then one full-bleed panorama), captions always visible
  * bottom-left like gallery wall labels. Each photo keeps its own parallax
  * rate so neighbouring frames drift out of step.
+ *
+ * The shapes come from galleryCell(), which always gives the LAST photo the
+ * full-bleed slot however many photos the client adds.
  */
-const LAYOUT = [
-  { span: "sm:col-span-7", height: "h-[38vh] sm:h-[56vh]", speed: 6 },
-  { span: "sm:col-span-5", height: "h-[38vh] sm:h-[56vh]", speed: 10 },
-  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 8 },
-  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 12 },
-  { span: "sm:col-span-4", height: "h-[34vh] sm:h-[42vh]", speed: 7 },
-  { span: "sm:col-span-12", height: "h-[38vh] sm:h-[62vh]", speed: 9 },
-];
+export default function Gallery({ data: initialData }: GalleryProps) {
+  const data = useSectionPreview("gallery", initialData);
+  const photos = data.photos ?? [];
 
-export default function Gallery() {
   return (
     <section id="gallery" className="scroll-mt-24 bg-ink-soft px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           index="04"
           label="Gallery"
-          title="Scenes from the ridge, through the seasons."
+          title={renderEmphasis(data.title)}
         />
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-12 sm:gap-4">
-          {GALLERY.map((photo, i) => {
-            const cell = LAYOUT[i % LAYOUT.length];
+          {photos.map((photo, i) => {
+            const cell = galleryCell(i, photos.length);
+            const image = mediaProps(photo.image, `gallery.photos[${i}].image`);
             return (
               <figure
-                key={photo.src}
+                key={photo.id ?? image.src}
                 className={`group relative col-span-1 overflow-hidden rounded-xl ${cell.span} ${cell.height}`}
               >
                 <div className="h-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                   <ParallaxImage
-                    src={photo.src}
-                    alt={photo.alt}
+                    src={image.src}
+                    alt={image.alt}
                     sizes="(min-width: 640px) 60vw, 100vw"
                     speed={cell.speed}
                     className="h-full rounded-xl"

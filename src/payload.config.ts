@@ -10,6 +10,9 @@ import { Media } from './collections/Media'
 import { SiteSettings } from './globals/SiteSettings'
 import { Hero } from './globals/Hero'
 import { Rooms } from './globals/Rooms'
+import { Experiences } from './globals/Experiences'
+import { Gallery } from './globals/Gallery'
+import { Tariff } from './globals/Tariff'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +25,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media],
-  globals: [Hero, Rooms, SiteSettings],
+  globals: [Hero, Rooms, Experiences, Gallery, Tariff, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

@@ -67,3 +67,39 @@ export const getRooms = cache(async (draft: boolean) => {
   if (!draft) assertPopulated(doc.items?.[0]?.name, "rooms");
   return doc;
 });
+
+export const getExperiences = cache(async (draft: boolean) => {
+  const payload = await getPayload({ config });
+  const doc = await payload.findGlobal({
+    slug: "experiences",
+    draft,
+    depth: 1,
+    overrideAccess: draft,
+  });
+  if (!draft) assertPopulated(doc.items?.[0]?.title, "experiences");
+  return doc;
+});
+
+export const getGallery = cache(async (draft: boolean) => {
+  const payload = await getPayload({ config });
+  const doc = await payload.findGlobal({
+    slug: "gallery",
+    draft,
+    depth: 1,
+    overrideAccess: draft,
+  });
+  if (!draft) assertPopulated(doc.photos?.[0]?.caption, "gallery");
+  return doc;
+});
+
+export const getTariff = cache(async (draft: boolean) => {
+  const payload = await getPayload({ config });
+  const doc = await payload.findGlobal({
+    slug: "tariff",
+    draft,
+    depth: 1,
+    overrideAccess: draft,
+  });
+  if (!draft) assertPopulated(doc.rates?.[0]?.name, "tariff");
+  return doc;
+});

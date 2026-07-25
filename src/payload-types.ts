@@ -90,11 +90,17 @@ export interface Config {
   globals: {
     hero: Hero;
     rooms: Room;
+    experiences: Experience;
+    gallery: Gallery;
+    tariff: Tariff;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
     hero: HeroSelect<false> | HeroSelect<true>;
     rooms: RoomsSelect<false> | RoomsSelect<true>;
+    experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
+    gallery: GallerySelect<false> | GallerySelect<true>;
+    tariff: TariffSelect<false> | TariffSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
@@ -397,6 +403,127 @@ export interface Room {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experiences".
+ */
+export interface Experience {
+  id: number;
+  /**
+   * Section heading. Wrap one word in *asterisks* for the celadon accent. NOTE: this heading counts the cards below ("Six things worth leaving the veranda for.") — update it if you add or remove one.
+   */
+  title: string;
+  /**
+   * At least one is required. Drag to reorder — cards stack in this order as the visitor scrolls.
+   */
+  items: {
+    title: string;
+    body: string;
+    image: number | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Small location line at the bottom of every card.
+   */
+  cardFooterLabel: string;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery".
+ */
+export interface Gallery {
+  id: number;
+  /**
+   * Section heading. Wrap one word in *asterisks* for the celadon accent.
+   */
+  title: string;
+  /**
+   * At least one photo is required. Drag to reorder. The LAST photo is always shown full width across the page, so give that slot a wide landscape rather than an interior.
+   */
+  photos: {
+    image: number | Media;
+    /**
+     * Shown over the bottom-left of the photo, like a gallery wall label.
+     */
+    caption: string;
+    id?: string | null;
+  }[];
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tariff".
+ */
+export interface Tariff {
+  id: number;
+  /**
+   * Section heading. Wrap one word in *asterisks* for the celadon accent.
+   */
+  title: string;
+  /**
+   * One row per type of sharing. Confirm current rates by phone before publishing — these change seasonally.
+   */
+  rates: {
+    /**
+     * Type of sharing, e.g. "Triple sharing"
+     */
+    name: string;
+    /**
+     * Just the number, no ₹ and no commas — 1500, not ₹1,500. The rupee symbol and comma are added automatically.
+     */
+    amount: number;
+    unit: string;
+    /**
+     * Optional small print, e.g. "common washroom".
+     */
+    note?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * Shown under "Included in every stay". The "All N meals included" chip counts these automatically.
+   */
+  mealsIncluded: {
+    value: string;
+    id?: string | null;
+  }[];
+  /**
+   * Shown under "Available on request, extra cost". May be left empty.
+   */
+  mealsExtra?:
+    | {
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * e.g. "12:00 PM"
+   */
+  checkIn: string;
+  /**
+   * e.g. "11:00 AM"
+   */
+  checkOut: string;
+  /**
+   * Shown on the Reserve chip, e.g. "05:30 IST"
+   */
+  firstLight: string;
+  /**
+   * These do NOT update automatically. If you change the meals or the check-in and check-out times above, edit these notes to match.
+   */
+  notes: {
+    value: string;
+    id?: string | null;
+  }[];
+  reserveHeading: string;
+  _status?: ('draft' | 'published') | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
@@ -478,6 +605,86 @@ export interface RoomsSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experiences_select".
+ */
+export interface ExperiencesSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        body?: T;
+        image?: T;
+        id?: T;
+      };
+  cardFooterLabel?: T;
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "gallery_select".
+ */
+export interface GallerySelect<T extends boolean = true> {
+  title?: T;
+  photos?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  _status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tariff_select".
+ */
+export interface TariffSelect<T extends boolean = true> {
+  title?: T;
+  rates?:
+    | T
+    | {
+        name?: T;
+        amount?: T;
+        unit?: T;
+        note?: T;
+        id?: T;
+      };
+  mealsIncluded?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  mealsExtra?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  checkIn?: T;
+  checkOut?: T;
+  firstLight?: T;
+  notes?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  reserveHeading?: T;
   _status?: T;
   updatedAt?: T;
   createdAt?: T;

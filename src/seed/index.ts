@@ -4,6 +4,9 @@ import { seedMedia } from "./media";
 import { seedSiteSettings } from "./siteSettings";
 import { seedHero } from "./hero";
 import { seedRooms } from "./rooms";
+import { seedExperiences } from "./experiences";
+import { seedGallery } from "./gallery";
+import { seedTariff } from "./tariff";
 
 async function seed() {
   const payload = await getPayload({ config });
@@ -12,6 +15,9 @@ async function seed() {
   await seedSiteSettings(payload);
   await seedHero(payload, media);
   await seedRooms(payload, media);
+  await seedExperiences(payload, media);
+  await seedGallery(payload, media);
+  await seedTariff(payload);
   payload.logger.info("seed: done");
   process.exit(0);
 }

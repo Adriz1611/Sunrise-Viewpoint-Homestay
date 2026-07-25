@@ -1,47 +1,51 @@
+"use client";
+
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import {
-  ACCOMMODATIONS,
-  MEALS_EXTRA,
-  MEALS_INCLUDED,
-  STAY_INFO,
-  TARIFF,
-  TARIFF_NOTES,
-} from "@/lib/site";
+import { renderEmphasis } from "@/lib/emphasis";
 import { telHref } from "@/lib/phone";
-import type { SiteSetting } from "@/payload-types";
-
-// Quick-glance highlights for the chip row below — derived only from facts
-// already present in site.ts (MEALS_INCLUDED, ACCOMMODATIONS features).
-const HOT_WATER = ACCOMMODATIONS.some((room) =>
-  room.features.some((f) => /hot water/i.test(f))
-);
-const TARIFF_HIGHLIGHTS = [
-  `All ${MEALS_INCLUDED.length} meals included`,
-  ...(HOT_WATER ? ["Hot water in every room"] : []),
-];
+import { useSectionPreview } from "@/lib/useSectionPreview";
+import type { Tariff as TariffData, Room, SiteSetting } from "@/payload-types";
 
 type TariffProps = {
+  data: TariffData;
+  /**
+   * The "Hot water in every room" chip is derived from the room features, so
+   * this section genuinely needs the rooms data. Do not remove this prop
+   * because it looks unused — it feeds the highlights below.
+   */
+  rooms: Room;
   phones: NonNullable<SiteSetting["bookingPhones"]>;
 };
 
-export default function Tariff({ phones }: TariffProps) {
+export default function Tariff({ data: initialData, rooms, phones }: TariffProps) {
+  const data = useSectionPreview("tariff", initialData);
+  const rates = data.rates ?? [];
+  const mealsIncluded = data.mealsIncluded ?? [];
+  const mealsExtra = data.mealsExtra ?? [];
+
+  // Quick-glance highlights for the chip row below — derived, so they cannot
+  // drift out of step with the meals list or the room features.
+  const hasHotWater = (rooms.items ?? []).some((room) =>
+    (room.features ?? []).some((f) => /hot water/i.test(f.value))
+  );
+  const highlights = [
+    `All ${mealsIncluded.length} meals included`,
+    ...(hasHotWater ? ["Hot water in every room"] : []),
+  ];
+
   return (
     <section id="tariff" className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
         <SectionHeading
           index="05"
           label="Tariff & Booking"
-          title={
-            <>
-              One per-person price, <em className="text-celadon">meals included</em>.
-            </>
-          }
+          title={renderEmphasis(data.title)}
         />
 
         {/* Quick-glance highlights */}
         <Reveal className="mb-8 flex flex-wrap gap-2">
-          {TARIFF_HIGHLIGHTS.map((item) => (
+          {highlights.map((item) => (
             <span
               key={item}
               className="rounded-full border border-cream/20 bg-ink/70 px-3.5 py-1.5 text-xs text-cream transition-colors duration-300 hover:border-cream/25"
@@ -53,8 +57,8 @@ export default function Tariff({ phones }: TariffProps) {
 
         {/* Price board — full-width rows, menu style */}
         <ul className="divide-y keyline border-y keyline">
-          {TARIFF.map((item, i) => (
-            <Reveal as="li" key={item.name} delay={i * 70}>
+          {rates.map((item, i) => (
+            <Reveal as="li" key={item.id ?? item.name} delay={i * 70}>
               <div className="group flex flex-wrap items-baseline gap-x-6 gap-y-1 border border-transparent py-7 transition-colors duration-300 hover:border-cream/25 hover:bg-ink-soft sm:px-4">
                 <span className="font-numeric text-xs text-teal">
                   ({String(i + 1).padStart(2, "0")})
@@ -71,7 +75,7 @@ export default function Tariff({ phones }: TariffProps) {
                 </div>
                 <p className="flex items-baseline gap-2 text-right">
                   <span className="font-numeric text-3xl text-celadon sm:text-5xl">
-                    {item.price}
+                    ₹{item.amount.toLocaleString("en-IN")}
                   </span>
                   <span className="text-xs text-cream-dim">{item.unit}</span>
                 </p>
@@ -87,10 +91,13 @@ export default function Tariff({ phones }: TariffProps) {
               Included in every stay
             </p>
             <ul className="mt-3 space-y-2">
-              {MEALS_INCLUDED.map((meal) => (
-                <li key={meal} className="flex items-center gap-3 text-sm text-cream-dim">
+              {mealsIncluded.map((meal) => (
+                <li
+                  key={meal.id ?? meal.value}
+                  className="flex items-center gap-3 text-sm text-cream-dim"
+                >
                   <span aria-hidden className="h-1 w-1 rounded-full bg-teal" />
-                  {meal}
+                  {meal.value}
                 </li>
               ))}
             </ul>
@@ -100,19 +107,25 @@ export default function Tariff({ phones }: TariffProps) {
               Available on request, extra cost
             </p>
             <ul className="mt-3 space-y-2">
-              {MEALS_EXTRA.map((meal) => (
-                <li key={meal} className="flex items-center gap-3 text-sm text-cream-dim">
+              {mealsExtra.map((meal) => (
+                <li
+                  key={meal.id ?? meal.value}
+                  className="flex items-center gap-3 text-sm text-cream-dim"
+                >
                   <span aria-hidden className="h-1 w-1 rounded-full bg-cream-dim" />
-                  {meal}
+                  {meal.value}
                 </li>
               ))}
             </ul>
           </Reveal>
           <Reveal as="ul" delay={160} className="space-y-2.5 sm:col-span-2 lg:col-span-1">
-            {TARIFF_NOTES.map((note) => (
-              <li key={note} className="flex gap-3 text-sm leading-relaxed text-cream-dim">
+            {(data.notes ?? []).map((note) => (
+              <li
+                key={note.id ?? note.value}
+                className="flex gap-3 text-sm leading-relaxed text-cream-dim"
+              >
                 <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-teal" />
-                {note}
+                {note.value}
               </li>
             ))}
           </Reveal>
@@ -127,17 +140,17 @@ export default function Tariff({ phones }: TariffProps) {
                   Reserve
                 </p>
                 <h3 className="font-display mt-4 text-3xl leading-tight text-cream sm:text-4xl">
-                  One phone call is all it takes.
+                  {data.reserveHeading}
                 </h3>
                 <div className="mt-6 flex flex-wrap gap-2">
                   <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
-                    Check-in {STAY_INFO.checkIn}
+                    Check-in {data.checkIn}
                   </span>
                   <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
-                    Check-out {STAY_INFO.checkOut}
+                    Check-out {data.checkOut}
                   </span>
                   <span className="font-numeric rounded-full border keyline px-4 py-2 text-xs text-cream-dim">
-                    First light 05:30 IST
+                    First light {data.firstLight}
                   </span>
                 </div>
               </div>

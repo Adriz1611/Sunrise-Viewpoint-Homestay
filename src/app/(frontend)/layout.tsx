@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Manrope, Space_Grotesk } from "next/font/google";
 import { draftMode } from "next/headers";
-import { SITE_URL, TARIFF } from "@/lib/site";
-import { getSiteSettings } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
+import { getSiteSettings, getTariff } from "@/lib/content";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -83,17 +83,18 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { isEnabled: draft } = await draftMode();
-  const settings = await getSiteSettings(draft);
+  const [settings, tariff] = await Promise.all([
+    getSiteSettings(draft),
+    getTariff(draft),
+  ]);
 
   // Parse coordinates from "26.9369° N, 88.4039° E" format
   const coordParts = settings.coordinates.match(/[\d.]+/g) || [];
   const latitude = parseFloat(coordParts[0] ?? "26.9369");
   const longitude = parseFloat(coordParts[1] ?? "88.4039");
 
-  // Extract min/max tariff from TARIFF data
-  const tariffPrices = TARIFF.map((t) =>
-    parseInt(t.price.replace(/[₹,]/g, ""), 10)
-  );
+  // Rates are plain numbers in Payload, so no parsing is needed here.
+  const tariffPrices = (tariff.rates ?? []).map((rate) => rate.amount);
   const minTariff = Math.min(...tariffPrices);
   const maxTariff = Math.max(...tariffPrices);
 

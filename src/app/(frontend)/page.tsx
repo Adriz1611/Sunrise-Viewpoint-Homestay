@@ -12,15 +12,26 @@ import Rooms from "@/components/Rooms";
 import SmoothScroll from "@/components/SmoothScroll";
 import Tariff from "@/components/Tariff";
 import Testimonials from "@/components/Testimonials";
-import { getHero, getRooms, getSiteSettings } from "@/lib/content";
+import {
+  getExperiences,
+  getGallery,
+  getHero,
+  getRooms,
+  getSiteSettings,
+  getTariff,
+} from "@/lib/content";
 
 export default async function Home() {
   const { isEnabled: draft } = await draftMode();
-  const [settings, hero, rooms] = await Promise.all([
-    getSiteSettings(draft),
-    getHero(draft),
-    getRooms(draft),
-  ]);
+  const [settings, hero, rooms, experiences, gallery, tariff] =
+    await Promise.all([
+      getSiteSettings(draft),
+      getHero(draft),
+      getRooms(draft),
+      getExperiences(draft),
+      getGallery(draft),
+      getTariff(draft),
+    ]);
 
   return (
     <>
@@ -37,9 +48,9 @@ export default async function Home() {
         <Marquee />
         <About />
         <Rooms data={rooms} />
-        <Experiences />
-        <Gallery />
-        <Tariff phones={settings.bookingPhones} />
+        <Experiences data={experiences} />
+        <Gallery data={gallery} />
+        <Tariff data={tariff} rooms={rooms} phones={settings.bookingPhones!} />
         <Testimonials />
         <GettingHere
           transport={{
