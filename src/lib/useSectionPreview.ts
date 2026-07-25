@@ -1,40 +1,39 @@
 "use client";
 
-import { useLivePreview } from "@payloadcms/live-preview-react";
-import { serverOriginFromEnv } from "@/lib/preview";
+import { useEffect, useRef, useState } from "react";
+import {
+  isLivePreviewEvent,
+  mergeData,
+  ready,
+  type LivePreviewMessageEvent,
+} from "@payloadcms/live-preview";
+import { isLivePreview, serverOriginFromEnv } from "@/lib/preview";
 
 /**
- * The origin Live Preview messages are exchanged with. `NEXT_PUBLIC_SERVER_URL`
- * wins; otherwise the browser's own origin, which is correct whenever the admin
- * and the site are the same deployment (they are here).
+ * Subscribes one section of the homepage to Payload's Live Preview.
  *
- * This runs on every render — including the server render during the static
- * prerender of `/` — so `window` must only be touched in the browser. The `""`
- * the server returns is never used: `useLivePreview` only reads `serverURL`
- * inside its mount effect, which does not run on the server, and the value is
- * not part of the rendered output, so it cannot cause a hydration mismatch.
- */
-function previewOrigin(): string {
-  const fromEnv = serverOriginFromEnv();
-  if (fromEnv) return fromEnv;
-  return typeof window === "undefined" ? "" : window.location.origin;
-}
-
-/**
- * Payload's Live Preview posts the document being edited to the previewed
- * page. This site is one page fed by several globals, so a section must only
- * consume live data that belongs to it — otherwise it is handed a different
- * global's fields and renders nonsense.
+ * This site is a single page fed by several globals, so the admin's keystroke
+ * messages have to be routed to the right section. `event.data.globalSlug` is
+ * the discriminator: the admin stamps it on every message it posts
+ * (`@payloadcms/ui/dist/elements/LivePreview/Window/index.js`, and it is typed
+ * on the exported `LivePreviewMessageEvent`). A message for another global is
+ * dropped, so a section is never handed fields that do not belong to it.
  *
- * `data.globalType` is the gate. `@payloadcms/live-preview` keeps ONE
- * module-level `previousData` shared by every `useLivePreview` subscriber on
- * the page and returns it verbatim for any message that is not a live-preview
- * data message — including the `payload-document-event` the admin posts on
- * every save. With two or more subscribers mounted, one of them will therefore
- * be handed another global's document. Payload stamps every global with its own
- * slug as `globalType`, so requiring the payload to say it belongs to this
- * section is a check on the data itself. (`data.id` cannot be used to
- * discriminate: every global has `id: 1`.)
+ * Rather than `useLivePreview`, this drives `@payloadcms/live-preview`'s
+ * primitives directly, for two reasons:
+ *
+ * - `subscribe`/`handleMessage` keep ONE module-level `previousData` cache
+ *   shared by every subscriber on the page, and hand it back verbatim for any
+ *   message that is not live-preview data. Owning the merge base in a per-hook
+ *   ref sidesteps that cache entirely instead of filtering around it, and means
+ *   only the section actually being edited issues a merge request.
+ * - The whole subscription is gated on `isLivePreview()`, so the public site
+ *   adds no `message` listener and posts no message at all. A wrong
+ *   `NEXT_PUBLIC_SERVER_URL` therefore cannot affect public visitors.
+ *
+ * `payload-document-event` messages (posted on save) fail the `type` check
+ * inside `isLivePreviewEvent` and are ignored outright, which is what we want:
+ * a save is handled by the `revalidateHome` hook, not by this subscription.
  *
  * The generic is constrained to `Record<string, any>` deliberately, exactly as
  * `useLivePreview` is: Payload's generated interfaces do not satisfy
@@ -44,11 +43,64 @@ export function useSectionPreview<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Record<string, any>,
 >(slug: string, initialData: T): T {
-  const { data } = useLivePreview<T>({
-    initialData,
-    serverURL: previewOrigin(),
-    depth: 1,
-  });
+  // Starts as the server-fetched props, so the server render and hydration
+  // produce identical output and the public site renders exactly this forever.
+  const [data, setData] = useState<T>(initialData);
 
-  return data?.globalType === slug ? data : initialData;
+  // Captured once. `initialData` is a fresh object on every render, so it must
+  // not reach the effect's dependency list or the subscription would tear down
+  // and re-post `ready()` on every keystroke.
+  const initialDataRef = useRef(initialData);
+
+  // This hook's own merge base — see the note about the shared cache above.
+  const previousDataRef = useRef<T | null>(null);
+
+  // `mergeData` is awaited per keystroke, so responses can land out of order.
+  // Only the newest request is allowed to write state.
+  const requestIdRef = useRef(0);
+
+  useEffect(() => {
+    if (!isLivePreview()) return;
+
+    // Must be the exact origin the admin is served at: `isLivePreviewEvent`
+    // compares it verbatim against `event.origin`, and `ready()` uses it as a
+    // `postMessage` targetOrigin.
+    const serverURL = serverOriginFromEnv() ?? window.location.origin;
+
+    const onMessage = async (event: LivePreviewMessageEvent<Partial<T>>) => {
+      if (!isLivePreviewEvent(event, serverURL)) return;
+      if (event.data.globalSlug !== slug) return;
+
+      const requestId = ++requestIdRef.current;
+
+      const merged = await mergeData<T>({
+        apiRoute: "/api",
+        depth: 1,
+        globalSlug: slug,
+        incomingData: event.data.data,
+        initialData: previousDataRef.current ?? initialDataRef.current,
+        serverURL,
+      });
+
+      if (requestId !== requestIdRef.current) return;
+
+      // The merge response contains ONLY the fields the admin posted — no
+      // `id`, `globalType`, `createdAt`, `updatedAt`. Spreading it over
+      // `initialData` fills the gaps: a field the client *cleared* arrives as
+      // present-but-null and correctly wins, while a field that was never in
+      // the form keeps its server-fetched value.
+      const next = { ...initialDataRef.current, ...merged };
+      previousDataRef.current = next;
+      setData(next);
+    };
+
+    window.addEventListener("message", onMessage);
+    ready({ serverURL });
+
+    return () => {
+      window.removeEventListener("message", onMessage);
+    };
+  }, [slug]);
+
+  return data;
 }

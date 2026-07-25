@@ -1277,13 +1277,49 @@ export function useSectionPreview<T extends Record<string, any>>(
 >    validation, so clearing the hero upload posts `backgroundImage: null` on both the client
 >    (keystroke data) and the server (draft render) — and `mediaProps` threw, killing the pane until
 >    reload. An error boundary cannot fix this: the throw unmounts the subscriber, so the pane stays
->    dead. Instead the *purpose* of that throw — catching a forgotten `depth: 1` — moved to
->    `assertMediaPopulated` in `src/lib/content.ts`, which throws only when an upload arrives as a
->    bare id. `mediaProps` now returns a neutral ink placeholder for an empty field. **Tasks 6–9 need
->    no per-section handling for this**; they inherit it.
+>    dead. Instead the *purpose* of that throw — catching a forgotten `depth: 1` — was narrowed to
+>    the case that can only ever be a bug: an upload arriving as a **bare relationship id**.
+>    `mediaProps` returns a neutral ink placeholder for an empty field, and throws only on a bare id.
+>    **Tasks 6–9 need no per-section handling for this**; they inherit it.
+>
+>    *Superseded detail (round 2).* That narrowed throw briefly lived in `assertMediaPopulated` in
+>    `src/lib/content.ts`, called once per image path. That does not scale: rooms/experiences/gallery
+>    images are array-nested, so every later task would have to remember its own loop, and nothing
+>    would catch it if it didn't — `media.ts`'s warning is dev-only, so a forgotten `depth: 1` would
+>    ship as silent placeholders. The check is now back inside `mediaProps` itself, which every image
+>    on the site passes through, so it is ONE universal guard with no per-section code.
+>    `assertMediaPopulated` is deleted.
+>
+>    The other half of item 5 was also wrong in the *published* global's favour: `assertPopulated`
+>    stayed reachable from draft state. `payload/dist/globals/operations/update.js` sets
+>    `skipValidation` when saving a draft, so a required field can legitimately be empty in a draft;
+>    `getHero(true)` then threw, the **server** draft render 500'd, and the subscriber never mounted —
+>    the same unrecoverable-pane failure, one field over. Both `getSiteSettings` and `getHero` now
+>    guard with `if (!draft) assertPopulated(…)`. Tasks 6–9 copy that shape.
+>
+> 6. **`useLivePreview` cannot be used at all here, and `globalType` is the wrong gate.** Item 1's
+>    fix was itself wrong. The admin posts `reduceFieldsToValues(formState)` — schema fields only —
+>    and `payload/dist/globals/operations/findOne.js:76` does
+>    `let doc = args.data ?? (hasDoc ? docFromDB : null) ?? {}`, **discarding `docFromDB`** when the
+>    live-preview merge supplies `data`. `globalType` is only ever stamped by the DB adapter
+>    (`@payloadcms/drizzle/dist/findGlobal.js:18`), so it is absent from the merge response.
+>    Verified against the running server: a plain `GET /api/globals/hero` returns `globalType: "hero"`,
+>    but the live-preview merge POST returns keys `[_status, backgroundImage, headlineLine1,
+>    headlineLine2]` and `globalType: undefined`. The gate was therefore always false and **keystrokes
+>    were silently ignored** — the pane looked right on load (`findGlobal` stamps `initialData`) and
+>    never changed.
+>
+>    The fix is to stop using `useLivePreview` and drive the exported primitives directly, gating on
+>    `event.data.globalSlug` — the discriminator the admin genuinely sends
+>    (`@payloadcms/ui/dist/elements/LivePreview/Window/index.js:61`, typed on the exported
+>    `LivePreviewMessageEvent`). Each section then owns its own `previousData` in a ref, which also
+>    removes the shared module-level cache hazard at its root instead of filtering around it, and
+>    means only the previewed section issues a merge request. The subscription is additionally gated
+>    on `isLivePreview()`, so the public site adds no listener and posts no message at all.
 >
 > See `src/lib/useSectionPreview.ts`, `src/lib/preview.ts`, `src/lib/media.ts` and
-> `src/lib/content.ts` for the shipped versions.
+> `src/lib/content.ts` for the shipped versions. `useSectionPreview(slug, initialData)` keeps its
+> signature throughout, so Tasks 6–9 subscribe exactly as Task 5 Step 4 shows.
 
 - [ ] **Step 4: Subscribe the hero**
 

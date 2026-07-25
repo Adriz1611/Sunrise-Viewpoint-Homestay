@@ -5,15 +5,22 @@
  */
 
 /**
- * `NEXT_PUBLIC_SERVER_URL` normalised to a bare origin, or `null` when it is
- * unset, empty or unparseable.
+ * `NEXT_PUBLIC_SERVER_URL` normalised to a bare http(s) origin, or `null` when
+ * it is unset, empty, unparseable or not http(s).
  *
  * Normalising matters because the value is used as a `postMessage`
  * targetOrigin — and is compared verbatim against `event.origin` inside
  * `@payloadcms/live-preview` — so it has to be a bare origin: a trailing
  * slash or a path makes it invalid (postMessage throws) or makes every
- * incoming message fail the origin check. An unparseable value returns `null`
- * rather than throwing, so a typo in `.env` cannot take the page down.
+ * incoming message fail the origin check.
+ *
+ * The protocol check is not belt-and-braces. `new URL()` accepts any
+ * non-special scheme, and `.origin` is then the literal *string* `"null"` —
+ * which is truthy, so it would sail through a plain falsy check and be handed
+ * to `postMessage`, which throws `SyntaxError` on it. The likeliest typo,
+ * `NEXT_PUBLIC_SERVER_URL=localhost:3000`, parses exactly that way (protocol
+ * `"localhost:"`, origin `"null"`). Returning `null` for anything that is not
+ * http(s) means callers fall back to a sane default instead.
  *
  * Written as a direct `process.env.NEXT_PUBLIC_SERVER_URL` member expression
  * so Next's build-time inlining substitutes it into the client bundle.
@@ -22,7 +29,9 @@ export function serverOriginFromEnv(): string | null {
   const raw = process.env.NEXT_PUBLIC_SERVER_URL;
   if (!raw) return null;
   try {
-    return new URL(raw).origin;
+    const url = new URL(raw);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.origin;
   } catch {
     return null;
   }

@@ -3,6 +3,18 @@ import { cache } from "react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
+/**
+ * Guards against rendering a global that was never seeded — an empty admin
+ * would otherwise render as a blank page with no explanation.
+ *
+ * Only ever called on the published path. Payload sets `skipValidation` when
+ * saving a draft (`payload/dist/globals/operations/update.js`), so a required
+ * field can legitimately be empty in a draft. Throwing here on a draft read
+ * would 500 the preview render, which unmounts the live-preview subscriber and
+ * leaves the pane permanently dead — no keystroke can bring it back. An empty
+ * draft field is the client's business; only an empty *published* global is a
+ * setup error. Tasks 6-9 follow the same `if (!draft)` shape.
+ */
 function assertPopulated(value: unknown, slug: string): void {
   if (value === undefined || value === null || value === "") {
     throw new Error(
@@ -12,28 +24,11 @@ function assertPopulated(value: unknown, slug: string): void {
 }
 
 /**
- * Catches a forgotten `depth: 1`: an unpopulated upload arrives as a bare
- * relationship id (a number, or a string of digits from the REST layer) rather
- * than a Media document, and would silently render as an empty slot.
+ * depth: 1 populates upload relationships with their url and alt. Forgetting it
+ * is caught universally at the point of use by `mediaProps` (src/lib/media.ts),
+ * which throws on a bare relationship id — so no fetcher here needs a
+ * per-image assertion, including for array-nested images.
  *
- * null/undefined deliberately passes. An empty upload field is legitimate —
- * Payload skips required-field validation on save-as-draft, so a draft read can
- * and does return null, and the frontend renders an empty slot for it (see
- * src/lib/media.ts). Only a *wrongly shaped* value is a bug worth throwing on.
- */
-function assertMediaPopulated(value: unknown, context: string): void {
-  const isBareId =
-    typeof value === "number" ||
-    (typeof value === "string" && /^\d+$/.test(value));
-  if (isBareId) {
-    throw new Error(
-      `${context}: image came back as a relationship id, not a document. Fetch the global with depth: 1.`
-    );
-  }
-}
-
-/**
- * depth: 1 populates upload relationships with their url and alt.
  * overrideAccess is only needed for draft reads, which happen behind the
  * preview secret.
  */
@@ -45,7 +40,7 @@ export const getSiteSettings = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.bookingPhones?.[0]?.number, "site-settings");
+  if (!draft) assertPopulated(doc.bookingPhones?.[0]?.number, "site-settings");
   return doc;
 });
 
@@ -57,7 +52,6 @@ export const getHero = cache(async (draft: boolean) => {
     depth: 1,
     overrideAccess: draft,
   });
-  assertPopulated(doc.headlineLine1, "hero");
-  assertMediaPopulated(doc.backgroundImage, "hero.backgroundImage");
+  if (!draft) assertPopulated(doc.headlineLine1, "hero");
   return doc;
 });
