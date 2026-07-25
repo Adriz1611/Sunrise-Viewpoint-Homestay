@@ -62,8 +62,11 @@ const LOCAL_IMAGES: { file: string; alt: string }[] = [
     alt: "Tents on a tea-covered ridge at dawn, distant snow peaks catching first light over rolling hills",
   },
   {
+    // Not in site.ts — this image is hardcoded in src/components/About.tsx,
+    // so its alt is copied verbatim from About.tsx:26, not from an imageAlt
+    // field here.
     file: "the-homestay.jpg",
-    alt: "The homestay building on the ridge among tea bushes",
+    alt: "The homestay's red-roofed cottages on the tea-garden ridge, layered hills and a cloud-filled valley beyond",
   },
 ];
 
