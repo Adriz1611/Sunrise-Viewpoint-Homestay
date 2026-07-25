@@ -46,7 +46,7 @@ export default async function Home() {
       <main id="main">
         <Hero data={hero} meta={settings} />
         <Marquee />
-        <About />
+        <About meta={settings} />
         <Rooms data={rooms} />
         <Experiences data={experiences} />
         <Gallery data={gallery} />

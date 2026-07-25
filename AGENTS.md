@@ -10,13 +10,16 @@ A single-page marketing site for a real homestay client (not a demo). Read this 
 
 ## Source of truth
 
-- **`src/lib/site.ts`** is the only place content lives — copy, contact numbers, tariff, routes, testimonials, image URLs. Never hardcode a homestay fact (a price, a phone number, a distance) inside a component; add it to `site.ts` and import it.
-- Every export in `site.ts` has a JSDoc comment stating where its facts came from — the client's own info sheet, a Google Maps reviews export, or a named third-party listing used only to fill gaps the info sheet didn't cover. When you add or change a fact, keep that provenance comment accurate. If a fact can't be verified, say so explicitly (an "≈" prefix, a note to confirm by phone) rather than presenting a guess as certain — this client's real prices and phone numbers are at stake.
+- **Payload owns the editable content; `src/lib/site.ts` owns the rest.** Payload globals manage the hero, rooms, experiences, gallery, tariff, and every phone number, coordinate and address — edit those at `/admin`, never in code. `site.ts` still owns `SITE_URL`, `NAV_LINKS`, `ROUTES`, `TESTIMONIALS`, `GOOGLE_REVIEWS` and the map URLs. Don't move a fact from one to the other without updating this note.
+- Never hardcode a homestay fact (a price, a phone number, a distance) inside a component. If Payload manages that section, it belongs in a global; otherwise add it to `site.ts` and import it.
+- **Provenance for content that moved lives in `src/seed/`.** Each seed file carries the original JSDoc provenance comments; editor-facing guidance (such as "confirm current rates by phone") lives in the fields' `admin.description` so the client sees it while editing. Every remaining export in `site.ts` keeps its own provenance comment. When you add or change a fact, keep that comment accurate. If a fact can't be verified, say so explicitly (an "≈" prefix, a note to confirm by phone) rather than presenting a guess as certain — this client's real prices and phone numbers are at stake.
+- **`npm run seed`** populates the six globals and the media library from the seed files. It is idempotent — existing content is skipped, never clobbered, so a client's edits survive a re-run. A fresh clone must run it, or the build fails with a message telling you to.
 
 ## Images
 
-- **The client's own photographs live in `public/images/`**, each named for where it belongs (e.g. `four-occupancy.jpeg`, `Tent.jpeg`, `teestariverfromtop.jpg`, `hero-kanchenjunga.jpg`). These are the real property/region photos and back the Rooms, Experiences, and Gallery sections plus the hero. **Don't change or replace the hero (`hero-kanchenjunga.jpg`)** without being asked to.
-- A few slots still fall back to **curated Unsplash stock** where the client hasn't supplied a photo yet — currently the "Nights built for stargazing" experience and the "Light through the pines" / "A home-cooked spread" gallery captions. Each such entry says so in a comment in `site.ts`; swap it for a real photo when one arrives. Don't reintroduce the old pattern of hotlinking low-resolution photos scraped from third-party listing sites — that looked worse than honest stock.
+- **Images are Media documents managed in the admin.** `public/images/` holds the client's originals and is the seed source — `npm run seed` uploads each one into the Media collection (reusing by filename, never overwriting). Alt text lives on the Media document, so it is written once and never duplicated per usage. **Don't change the hero's default photo (`hero-kanchenjunga.jpg`)** without being asked to.
+- A few slots still fall back to **curated Unsplash stock** where the client hasn't supplied a photo yet — currently the "Nights built for stargazing" experience and the "Light through the pines" / "A home-cooked spread" gallery captions. These are seeded as ordinary Media documents (see `src/seed/media.ts`, which notes each one), so the client can now swap them at `/admin` without a developer. Don't reintroduce the old pattern of hotlinking low-resolution photos scraped from third-party listing sites — that looked worse than honest stock.
+- An empty upload field renders as a flat Ink Black slot rather than throwing (`mediaProps` in `src/lib/media.ts`), because drafts skip required-field validation and a throw would kill the Live Preview pane. A *bare relationship id* still throws — that one means a fetcher forgot `depth: 1`.
 - Only `images.unsplash.com` is allowlisted in `next.config.ts`'s `images.remotePatterns`; adding a new *remote* image domain means adding it there too, or `next/image` will refuse to render it. Local `/images/…` files need no allowlisting.
 - Before using any new *remote* photo URL, verify it actually resolves (`curl -o /dev/null -w "%{http_code}" <url>`) rather than trusting a photo ID from memory — a wrong ID renders as a broken image with no build-time error. For local files, prefer web-safe names (no spaces) so the `/images/…` path never needs URL-encoding.
 
@@ -35,9 +38,32 @@ A single-page marketing site for a real homestay client (not a demo). Read this 
   (`FAVICON_REGEX = /^[\/]favicon\.ico$/`, `ROBOTS_TXT_REGEX = /^[\/]robots\.txt$/` in
   `next/dist/lib/metadata/is-metadata-route.js`), so a route-group prefix 404s both
   routes with no build error. `sitemap.ts` nests fine because its regex is unanchored.
-- **`src/lib/site.ts` is still the only source of truth for homestay facts.** Payload
-  currently manages nothing but `Users` and `Media`. Do not treat a Payload collection
-  as a second home for a price, phone number, or distance.
+- **Six globals in `src/globals/` hold the editable content**: `hero`, `rooms`,
+  `experiences`, `gallery`, `tariff` and `site-settings`. All six have drafts enabled
+  (`versions: { drafts: true, max: 20 }` — note `max`, not the collection-only
+  `maxPerDoc`), a `revalidateHome` afterChange hook, and Live Preview. Fetch them only
+  through `src/lib/content.ts`, which wraps each read in React `cache()` at `depth: 1`.
+- **`PREVIEW_SECRET` and `NEXT_PUBLIC_SERVER_URL` must be set in `.env`.** Live Preview
+  fails without them. `NEXT_PUBLIC_SERVER_URL` must be the exact origin the admin is
+  served at, with no trailing slash: it is compared verbatim against `event.origin`, and
+  `NEXT_PUBLIC_*` is frozen at build time.
+- **`/` must stay statically prerendered (`○` in the build output, never `ƒ`).** The
+  preview slug is deliberately never read from the page's `searchParams`, because that
+  would opt the homepage into dynamic rendering. Preview instead runs through
+  `/next/preview`, which validates the secret and enables Next draft mode.
+- **Preview mode disables animations on purpose.** `prefersReducedMotion()` in
+  `src/lib/gsap.ts` returns true inside the admin's preview iframe, because Live Preview
+  re-renders on every keystroke and that re-splits the hero headline and rebuilds
+  ScrollTriggers mid-animation. Don't "fix" this. It also means the Rooms section shows
+  as a vertical stack in the preview pane rather than pinning horizontally.
+- **Live Preview routes by `event.data.globalSlug`, not `globalType`.** The merge
+  endpoint discards the DB document when the admin supplies form data
+  (`payload/dist/globals/operations/findOne.js`), so `globalType` is absent from its
+  response and gating on it silently ignores every keystroke. See
+  `src/lib/useSectionPreview.ts`.
+- **The gallery's last photo always takes the full-bleed slot** — see `galleryCell()` in
+  `src/lib/gallery-layout.ts`. Don't restore a fixed layout cycle; it silently lost the
+  panorama slot as soon as a seventh photo was added.
 - `src/payload-types.ts` and `src/app/(payload)/admin/importMap.js` are generated —
   never hand-edit them. Regenerate with `npm run generate:types` and
   `npm run generate:importmap`.

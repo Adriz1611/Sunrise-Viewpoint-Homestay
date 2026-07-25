@@ -2,7 +2,11 @@ import Counter from "@/components/Counter";
 import ParallaxImage from "@/components/ParallaxImage";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
-import { META } from "@/lib/site";
+import type { SiteSetting } from "@/payload-types";
+
+type AboutProps = {
+  meta: Pick<SiteSetting, "coordinates" | "region">;
+};
 
 const STATS = [
   { value: "8", unit: "rooms across the tea garden" },
@@ -10,7 +14,7 @@ const STATS = [
   { value: "~10", unit: "years welcoming guests" },
 ];
 
-export default function About() {
+export default function About({ meta }: AboutProps) {
   return (
     <section id="homestay" className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
@@ -62,7 +66,7 @@ export default function About() {
             </dl>
 
             <Reveal className="font-numeric text-xs uppercase tracking-[0.2em] text-cream-dim">
-              {META.coordinates} — {META.region}
+              {meta.coordinates} — {meta.region}
             </Reveal>
           </div>
         </div>

@@ -1,11 +1,18 @@
 /**
- * Single source of truth for site content.
+ * The site facts Payload does NOT manage.
+ *
+ * The editable content — hero, rooms, experiences, gallery, tariff, and every
+ * phone number, coordinate and address — now lives in Payload globals and is
+ * edited at /admin. What remains here is structural or externally sourced:
+ * the domain, the section navigation, route distances, the Google review
+ * summary, the curated testimonial showcase, and the map URLs. Provenance for
+ * everything that moved lives in the matching file under src/seed/.
  *
  * Facts here are drawn from the homestay's own info sheet ("Sunrise Viewpoint
  * Homestay.md", provided by the client) plus verified third-party listings
- * (nexttripbooking.com / bookingnexttrip.com for tariff, darjeeling-tourism.com
- * for route distances). Where a number couldn't be verified, it's written as
- * an approximation ("≈") rather than invented as fact.
+ * (darjeeling-tourism.com for route distances) and a Google Maps reviews
+ * export. Where a number couldn't be verified, it's written as an
+ * approximation ("≈") rather than invented as fact.
  */
 
 /**
@@ -15,47 +22,6 @@
  */
 export const SITE_URL = "https://sunriseviewpointhomestay.com";
 
-export const CONTACT = {
-  phones: [
-    { label: "Bookings", number: "+91 98006 37784", href: "tel:+919800637784" },
-    { label: "Bookings (alt.)", number: "+91 70195 92753", href: "tel:+917019592753" },
-  ],
-  address: "Aahal Dara, Sittong III, Kurseong, Darjeeling District, West Bengal 734008",
-};
-
-export const TRANSPORT_CONTACT = {
-  name: "Gopal Chhetri",
-  phones: [
-    { number: "+91 94746 80915", href: "tel:+919474680915" },
-    { number: "+91 89186 78841", href: "tel:+918918678841" },
-  ],
-};
-
-export const STAY_INFO = {
-  checkIn: "12:00 PM",
-  checkOut: "11:00 AM",
-};
-
-export const MEALS_INCLUDED = [
-  "Morning tea",
-  "Breakfast",
-  "Lunch",
-  "Evening tea & snacks",
-  "Dinner",
-];
-
-export const MEALS_EXTRA = [
-  "Barbecue (BBQ)",
-  "Extra snacks",
-  "Special dishes",
-];
-
-export const META = {
-  coordinates: "26.9369° N, 88.4039° E",
-  altitude: "≈ 4,200 ft",
-  region: "Aahal Dara, Sittong III · Darjeeling Hills",
-};
-
 export const NAV_LINKS = [
   { id: "homestay", label: "The Homestay", index: "01" },
   { id: "rooms", label: "Rooms", index: "02" },
@@ -64,186 +30,6 @@ export const NAV_LINKS = [
   { id: "tariff", label: "Tariff", index: "05" },
   { id: "reviews", label: "Guest Book", index: "06" },
   { id: "getting-here", label: "Getting Here", index: "07" },
-];
-
-/**
- * The property's own photographs, supplied by the client (in public/images,
- * named for where they belong). These are the three accommodation types the
- * homestay offers — four-sharing rooms, six-sharing rooms, and camping tents,
- * and nothing else. Keep the tone (warm, simple, mountain-homestay) if these
- * are ever re-shot.
- */
-export const ACCOMMODATIONS = [
-  {
-    name: "4-Sharing Rooms",
-    count: "6 rooms",
-    occupancy: "up to 4 guests per room",
-    tagline:
-      "Simple, spotless rooms built into the tea garden slope. Every room has an attached hot-water bath.",
-    features: [
-      "Attached bath, hot water",
-      "Tea-garden views",
-      "Extra bedding on request",
-      "Suited to couples & small families",
-    ],
-    image: "/images/four-occupancy.jpeg",
-    imageAlt:
-      "A four-sharing room with two double beds under a wood-panelled ceiling, windows opening to the valley",
-  },
-  {
-    name: "6-Sharing Rooms",
-    count: "2 rooms",
-    occupancy: "up to 6 guests per room",
-    tagline:
-      "Larger rooms that sleep up to six, for families and groups travelling together.",
-    features: [
-      "Three beds, sleeps up to 6",
-      "Attached bath, hot water",
-      "Mountain-facing windows",
-      "Best value for groups",
-    ],
-    image: "/images/six-person-occupancy.jpeg",
-    imageAlt:
-      "A spacious six-sharing room with three beds and wide windows framing the mountains",
-  },
-  {
-    name: "Camping Tents",
-    count: "pitched on request",
-    occupancy: "3–4 guests per tent (larger tents on request)",
-    tagline:
-      "Tents pitched right on the ridge, next to the sunrise viewpoint.",
-    features: [
-      "Common washroom",
-      "Bedding provided",
-      "Larger tents for groups on request",
-      "Best for first light at 5:30 AM",
-    ],
-    image: "/images/Tent.jpeg",
-    imageAlt:
-      "Tents pitched on the open ridge with the snow peaks of the range on the horizon",
-  },
-];
-
-/**
- * Experience facts are from the client's info sheet (distances, altitudes,
- * seasons). Images are the property's own photographs (public/images), except
- * "Nights built for stargazing", which stays on verified Unsplash stock — the
- * client hasn't supplied a night-sky photo yet. Swap it when one arrives.
- */
-export const EXPERIENCES = [
-  {
-    title: "Sunrise from the hotel",
-    body: "First light straight from the homestay — the sun coming up over the ridge and the tents, the Kanchenjunga range catching the earliest colour. It is what the homestay is named for.",
-    image: "/images/Sunrise.jpg",
-    imageAlt:
-      "The sun rising beside the homestay, camping tents and prayer flags on the ridge in the morning light",
-  },
-  {
-    title: "Nights built for stargazing",
-    body: "Clear high-altitude skies with almost no light pollution. The stargazing is best on cold, moonless nights.",
-    image:
-      "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1600&auto=format&fit=crop",
-    imageAlt: "The Milky Way over a dark mountain silhouette",
-  },
-  {
-    title: "Namthing Pokhari",
-    body: "A pine-ringed lake ≈2 km away at nearly 4,000 ft, home to the endangered Himalayan salamander. Best June–September, when the monsoon greens the forest.",
-    image: "/images/NamthingPokhari.jpg",
-    imageAlt:
-      "Namthing Pokhari lake ringed by pine forest in the monsoon rain, a tall Hanuman statue and saffron flags on its bank",
-  },
-  {
-    title: "Birding in Latpanchar",
-    body: "Inside the Mahananda Wildlife Sanctuary, ≈5 km away at ≈4,200 ft. Home to over 200 bird species, including the rufous-necked hornbill. Best October–April.",
-    image: "/images/BirdinginLatpanchar.jpg",
-    imageAlt:
-      "A yellow-and-green sunbird feeding on orange flowers in the forest",
-  },
-  {
-    title: "Sittong's orange orchards",
-    body: "≈2 km down the ridge, the \"Orange Village of West Bengal\" turns amber October–February, peaking from late December to February.",
-    image: "/images/SittongOraneOrchards.jpg",
-    imageAlt: "Ripe oranges hanging among dark green leaves on the tree",
-  },
-  {
-    title: "The Teesta below",
-    body: "On clear days, the Teesta river's emerald-green thread is visible in the valley far below. The view shifts with the weather through the day.",
-    image: "/images/teestariverfromtop.jpg",
-    imageAlt:
-      "The emerald-green Teesta river winding through the forested valley far below",
-  },
-];
-
-/**
- * The property's own photographs (public/images, named for their captions),
- * except "Light through the pines" and "A home-cooked spread", which stay on
- * verified Unsplash stock — the client hasn't supplied photos for those two
- * captions yet. Swap them in when they arrive.
- */
-export const GALLERY = [
-  {
-    src: "/images/morningontheridge.jpg",
-    alt: "Visitors on the grassy ridgeline above a sea of clouds at dawn",
-    caption: "Morning on the ridge",
-  },
-  {
-    src: "/images/Thehighrangecleardayview.jpg",
-    alt: "The snow-capped high range across the hills, seen from a tent doorway on a clear day",
-    caption: "The high range, clear-day view",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=1800&auto=format&fit=crop",
-    alt: "Morning light through pine forest",
-    caption: "Light through the pines",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?q=80&w=1800&auto=format&fit=crop",
-    alt: "Curries and rice served in steel bowls, home-style",
-    caption: "A home-cooked spread",
-  },
-  {
-    src: "/images/teafromthehills.jpg",
-    alt: "A glass cup of amber tea held up against a misty, tea-covered hillside",
-    caption: "Tea from the hills",
-  },
-  // Kept last on purpose: the gallery's full-bleed panorama slot — give it
-  // a landscape, not an interior.
-  {
-    src: "/images/firstlightoverthehills.jpg",
-    alt: "Tents on a tea-covered ridge at dawn, distant snow peaks catching first light over rolling hills",
-    caption: "First light over the hills",
-  },
-];
-
-/**
- * Per-person, per-night tariff — sourced from nexttripbooking.com /
- * bookingnexttrip.com listings for this property (see README). Confirm
- * current rates by phone before publishing, as these can change seasonally.
- */
-export const TARIFF = [
-  {
-    name: "Triple sharing",
-    price: "₹1,500",
-    unit: "per person / night",
-  },
-  {
-    name: "4–5 sharing",
-    price: "₹1,400",
-    unit: "per person / night",
-  },
-  {
-    name: "Camping tent",
-    price: "₹1,200",
-    unit: "per person / night",
-    note: "common washroom",
-  },
-];
-
-export const TARIFF_NOTES = [
-  `Tariff includes ${MEALS_INCLUDED.join(", ").toLowerCase()}.`,
-  `${MEALS_EXTRA.join(", ")} available on request at extra cost.`,
-  `Check-in from ${STAY_INFO.checkIn} · Check-out by ${STAY_INFO.checkOut}.`,
-  "Call ahead to confirm current rates and availability.",
 ];
 
 /**

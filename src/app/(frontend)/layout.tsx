@@ -127,7 +127,6 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <head>
-        <link rel="preconnect" href="https://images.unsplash.com" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
