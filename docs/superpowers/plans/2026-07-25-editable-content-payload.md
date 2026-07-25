@@ -620,7 +620,7 @@ export const SiteSettings: GlobalConfig = {
     group: "Settings",
     livePreview: livePreviewFor("site-settings"),
   },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
@@ -968,7 +968,7 @@ export const Hero: GlobalConfig = {
   slug: "hero",
   label: "Hero",
   admin: { group: "Content", livePreview: livePreviewFor("hero") },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
@@ -1324,7 +1324,7 @@ export const Rooms: GlobalConfig = {
   slug: "rooms",
   label: "Rooms",
   admin: { group: "Content", livePreview: livePreviewFor("rooms") },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
@@ -1556,7 +1556,7 @@ export const Experiences: GlobalConfig = {
   slug: "experiences",
   label: "Experiences",
   admin: { group: "Content", livePreview: livePreviewFor("experiences") },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
@@ -1780,7 +1780,7 @@ export const Gallery: GlobalConfig = {
   slug: "gallery",
   label: "Gallery",
   admin: { group: "Content", livePreview: livePreviewFor("gallery") },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
@@ -1973,7 +1973,7 @@ export const Tariff: GlobalConfig = {
   slug: "tariff",
   label: "Tariff & Booking",
   admin: { group: "Content", livePreview: livePreviewFor("tariff") },
-  versions: { drafts: true, maxPerDoc: 20 },
+  versions: { drafts: true, max: 20 },
   access: {
     read: () => true,
     update: ({ req: { user } }) => Boolean(user),
