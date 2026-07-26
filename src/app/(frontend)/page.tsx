@@ -1,6 +1,5 @@
 import { draftMode } from "next/headers";
 import About from "@/components/About";
-import CallPill from "@/components/CallPill";
 import Experiences from "@/components/Experiences";
 import Footer from "@/components/Footer";
 import Gallery from "@/components/Gallery";
@@ -60,7 +59,6 @@ export default async function Home() {
         />
       </main>
       <Footer settings={settings} />
-      <CallPill phone={settings.bookingPhones![0]} />
     </>
   );
 }

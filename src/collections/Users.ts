@@ -7,7 +7,18 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   fields: [
-    // Email added by default
-    // Add more fields as needed
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'manager',
+      options: [
+        { label: 'Manager', value: 'manager' },
+        { label: 'Staff', value: 'staff' },
+      ],
+      admin: {
+        description: 'Room-status access is limited to authenticated staff and managers in this admin panel.',
+      },
+    },
   ],
 }

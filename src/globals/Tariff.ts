@@ -64,6 +64,15 @@ export const Tariff: GlobalConfig = {
       ],
     },
     {
+      name: "rateDisclaimer",
+      type: "textarea",
+      required: true,
+      admin: {
+        description:
+          "Shown beneath the rates. Keep this clear that online prices are approximate and should be confirmed by calling the homestay.",
+      },
+    },
+    {
       name: "mealsIncluded",
       type: "array",
       minRows: 1,

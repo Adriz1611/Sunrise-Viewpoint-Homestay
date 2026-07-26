@@ -148,7 +148,7 @@ export default function Hero({ data: initialData, meta }: HeroProps) {
           </p>
           <a
             href="#tariff"
-            className="hero-fade inline-block shrink-0 self-start rounded-full bg-cream px-7 py-3.5 text-sm font-semibold text-ink transition-[transform,color,background-color] duration-200 hover:bg-celadon active:scale-[0.97] sm:self-auto"
+            className="hero-fade hidden shrink-0 rounded-full bg-cream px-7 py-3.5 text-sm font-semibold text-ink transition-[transform,color,background-color] duration-200 hover:bg-celadon active:scale-[0.97] lg:inline-block"
           >
             {data.ctaLabel}
           </a>

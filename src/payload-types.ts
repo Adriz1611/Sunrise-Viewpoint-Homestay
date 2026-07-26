@@ -69,6 +69,10 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    'room-types': RoomType;
+    'hotel-rooms': HotelRoom;
+    'daily-availability': DailyAvailability;
+    bookings: Booking;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +82,10 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'room-types': RoomTypesSelect<false> | RoomTypesSelect<true>;
+    'hotel-rooms': HotelRoomsSelect<false> | HotelRoomsSelect<true>;
+    'daily-availability': DailyAvailabilitySelect<false> | DailyAvailabilitySelect<true>;
+    bookings: BookingsSelect<false> | BookingsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -137,6 +145,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Room-status access is limited to authenticated staff and managers in this admin panel.
+   */
+  role: 'manager' | 'staff';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -176,6 +188,112 @@ export interface Media {
   focalY?: number | null;
 }
 /**
+ * Reusable room configurations. Add a type here before adding its rooms.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "room-types".
+ */
+export interface RoomType {
+  id: number;
+  /**
+   * For example: 4-Sharing or 2-Sharing.
+   */
+  name: string;
+  /**
+   * Maximum guests for one whole room. Beds are not booked separately.
+   */
+  capacity: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Each record is one bookable room. Mark a room inactive to remove it from future daily availability.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hotel-rooms".
+ */
+export interface HotelRoom {
+  id: number;
+  /**
+   * A stable room identifier, for example 101 or Cottage A.
+   */
+  roomNumber: string;
+  roomType: number | RoomType;
+  /**
+   * Only active rooms appear in the daily availability board.
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * One record per date. Bookings update these room statuses automatically; use this board for manual changes and maintenance.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "daily-availability".
+ */
+export interface DailyAvailability {
+  id: number;
+  /**
+   * Create exactly one availability board for each calendar date.
+   */
+  date: string;
+  /**
+   * Select a date, save once, then update only the room status and note below.
+   */
+  availability?:
+    | {
+        room: number | HotelRoom;
+        /**
+         * Set automatically from the Rooms list.
+         */
+        roomNumber: string;
+        bookingRecordID?: string | null;
+        status: 'available' | 'booked' | 'maintenance';
+        /**
+         * Optional guest, group, or operational note. Clear it when the room becomes Available again.
+         */
+        guestNotes?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Book one or more whole rooms for a guest or group. Cancelling releases every booked night automatically.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings".
+ */
+export interface Booking {
+  id: number;
+  customerName: string;
+  /**
+   * Use the number staff should call for this booking.
+   */
+  customerPhone: string;
+  /**
+   * Select every whole room this guest or group is taking.
+   */
+  rooms: (number | HotelRoom)[];
+  checkIn: string;
+  /**
+   * The room becomes available again on this date.
+   */
+  checkOut: string;
+  /**
+   * Set to Cancelled to release all rooms and dates without deleting the booking record.
+   */
+  status: 'confirmed' | 'cancelled';
+  /**
+   * Optional internal note for the booking.
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -206,6 +324,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'room-types';
+        value: number | RoomType;
+      } | null)
+    | ({
+        relationTo: 'hotel-rooms';
+        value: number | HotelRoom;
+      } | null)
+    | ({
+        relationTo: 'daily-availability';
+        value: number | DailyAvailability;
+      } | null)
+    | ({
+        relationTo: 'bookings';
+        value: number | Booking;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -254,6 +388,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -288,6 +423,61 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "room-types_select".
+ */
+export interface RoomTypesSelect<T extends boolean = true> {
+  name?: T;
+  capacity?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "hotel-rooms_select".
+ */
+export interface HotelRoomsSelect<T extends boolean = true> {
+  roomNumber?: T;
+  roomType?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "daily-availability_select".
+ */
+export interface DailyAvailabilitySelect<T extends boolean = true> {
+  date?: T;
+  availability?:
+    | T
+    | {
+        room?: T;
+        roomNumber?: T;
+        bookingRecordID?: T;
+        status?: T;
+        guestNotes?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "bookings_select".
+ */
+export interface BookingsSelect<T extends boolean = true> {
+  customerName?: T;
+  customerPhone?: T;
+  rooms?: T;
+  checkIn?: T;
+  checkOut?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -483,6 +673,10 @@ export interface Tariff {
     id?: string | null;
   }[];
   /**
+   * Shown beneath the rates. Keep this clear that online prices are approximate and should be confirmed by calling the homestay.
+   */
+  rateDisclaimer: string;
+  /**
    * Shown under "Included in every stay". The "All N meals included" chip counts these automatically.
    */
   mealsIncluded: {
@@ -663,6 +857,7 @@ export interface TariffSelect<T extends boolean = true> {
         note?: T;
         id?: T;
       };
+  rateDisclaimer?: T;
   mealsIncluded?:
     | T
     | {

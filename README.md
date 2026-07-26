@@ -53,11 +53,18 @@ openssl rand -hex 32
 npm run dev      # starts Postgres via Docker, then http://localhost:3000
 ```
 
+### Vercel deployment
+
+Production uses Prisma Postgres for Payload's database and Vercel Blob for
+Media uploads. See [`docs/vercel-deployment.md`](docs/vercel-deployment.md) for
+the one-time Vercel setup, environment variables, migration, and seed steps.
+
 Visit `http://localhost:3000/admin` and create the first admin user — Payload's admin
 panel prompts for this automatically until one exists.
 
 ```bash
-npm run build    # production build (also requires Docker; see above)
+npm run build    # production/Vercel build (requires DATABASE_URI)
+npm run build:local # same build, explicitly starts the local Docker database
 npm run lint     # ESLint
 npm run db:up    # start the Postgres container by hand
 npm run db:down  # stop it

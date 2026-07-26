@@ -100,27 +100,49 @@ export default function Nav({ phones }: NavProps) {
           {phones![0].number}
         </a>
 
-        {/* Mobile menu button */}
-        <button
-          ref={hamburgerRef}
-          type="button"
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen(!open)}
-          className="flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-1.5 lg:hidden"
-        >
-          <span
-            className={`h-px w-6 bg-cream transition-transform duration-300 ${
-              open ? "translate-y-[3.5px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`h-px w-6 bg-cream transition-transform duration-300 ${
-              open ? "-translate-y-[3.5px] -rotate-45" : ""
-            }`}
-          />
-        </button>
+        <div className="flex items-center gap-1.5 lg:hidden">
+          <a
+            href={telHref(phones![0].number)}
+            aria-label="Call Sunrise Viewpoint Homestay"
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-teal px-4 text-sm font-medium text-ink transition-[transform,background-color] duration-200 hover:bg-celadon active:scale-[0.97]"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="h-4 w-4"
+            >
+              <path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.24 1.02L6.6 10.8Z" />
+            </svg>
+            Call
+          </a>
+
+          {/* Mobile menu button */}
+          <button
+            ref={hamburgerRef}
+            type="button"
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            onClick={() => setOpen(!open)}
+            className="flex h-11 w-11 cursor-pointer flex-col items-center justify-center gap-1.5"
+          >
+            <span
+              className={`h-px w-6 bg-cream transition-transform duration-300 ${
+                open ? "translate-y-[3.5px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`h-px w-6 bg-cream transition-transform duration-300 ${
+                open ? "-translate-y-[3.5px] -rotate-45" : ""
+              }`}
+            />
+          </button>
+        </div>
       </nav>
 
       {/* Mobile overlay menu */}

@@ -12,8 +12,8 @@ type GalleryProps = { data: GalleryData };
 
 /**
  * Editorial mosaic: aligned rows with deliberately unequal column widths
- * (7/5, then 4/4/4, then one full-bleed panorama), captions always visible
- * bottom-left like gallery wall labels. Each photo keeps its own parallax
+ * (7/5, then 4/4/4, then one full-bleed panorama), with captions in a stable
+ * label band below each image. Each photo keeps its own parallax
  * rate so neighbouring frames drift out of step.
  *
  * The shapes come from galleryCell(), which always gives the LAST photo the
@@ -39,19 +39,19 @@ export default function Gallery({ data: initialData }: GalleryProps) {
             return (
               <figure
                 key={photo.id ?? image.src}
-                className={`group relative col-span-1 overflow-hidden rounded-xl ${cell.span} ${cell.height}`}
+                className={`group grid min-w-0 grid-rows-[minmax(0,1fr)_auto] overflow-hidden rounded-xl bg-ink ${cell.span} ${cell.height}`}
               >
-                <div className="h-full transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+                <div className="min-h-0 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04]">
                   <ParallaxImage
                     src={image.src}
                     alt={image.alt}
                     sizes="(min-width: 640px) 60vw, 100vw"
                     speed={cell.speed}
-                    className="h-full rounded-xl"
+                    className="h-full"
                   />
                 </div>
-                <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 rounded-b-xl bg-gradient-to-t from-ink/80 to-transparent p-4 pt-12 sm:p-5">
-                  <span className="font-display text-lg tracking-tight text-cream sm:text-xl">
+                <figcaption className="border-t keyline bg-ink px-4 py-3 sm:px-5 sm:py-4">
+                  <span className="block font-display text-base leading-snug tracking-tight text-cream sm:text-lg">
                     {photo.caption}
                   </span>
                 </figcaption>

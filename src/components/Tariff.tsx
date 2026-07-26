@@ -84,6 +84,12 @@ export default function Tariff({ data: initialData, rooms, phones }: TariffProps
           ))}
         </ul>
 
+        <Reveal delay={100}>
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-cream-dim">
+            {data.rateDisclaimer}
+          </p>
+        </Reveal>
+
         {/* What the tariff covers */}
         <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal>
