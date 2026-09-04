@@ -1,25 +1,18 @@
-import Reveal from "@/components/Reveal";
-import SectionHeading from "@/components/SectionHeading";
-import { ArrowUpRight } from "@/components/icons";
-import { MAP_DIRECTIONS_URL, MAP_EMBED_SRC, ROUTES } from "@/lib/site";
-import { telHref } from "@/lib/phone";
+import Reveal from '@/components/Reveal'
+import SectionHeading from '@/components/SectionHeading'
+import { ArrowUpRight } from '@/components/icons'
+import { ALTERNATIVE_ROUTES, MAP_DIRECTIONS_URL, MAP_EMBED_SRC, ROUTES } from '@/lib/site'
+import { telHref } from '@/lib/phone'
 
 type GettingHereProps = {
-  transport: { name: string; phones: { number: string }[] };
-};
+  transport: { name: string; phones: { number: string }[] }
+}
 
 export default function GettingHere({ transport }: GettingHereProps) {
   return (
-    <section
-      id="getting-here"
-      className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32"
-    >
+    <section id="getting-here" className="scroll-mt-24 px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
-          index="07"
-          label="Getting Here"
-          title="Under three hours from NJP station and Bagdogra airport."
-        />
+        <SectionHeading index="07" label="Getting Here" title="How to Reach Us" />
 
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
@@ -27,39 +20,42 @@ export default function GettingHere({ transport }: GettingHereProps) {
               {ROUTES.map((route, i) => (
                 <Reveal as="li" key={route.from} delay={i * 80}>
                   <div className="py-6">
-                    <div className="flex items-baseline justify-between gap-6">
-                      <h3 className="font-display text-xl text-cream">
-                        {route.from}
+                    <div>
+                      <h3 className="font-display text-xl leading-snug text-cream">
+                        From {route.from}
                       </h3>
-                      <p className="font-numeric shrink-0 text-right text-sm text-celadon">
-                        {route.distance}
-                        <span className="block text-xs text-cream-dim">
-                          {route.time}
-                        </span>
-                      </p>
                     </div>
-                    <p className="mt-1.5 text-sm text-cream-dim">{route.via}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-cream-dim">
+                      <span className="text-celadon">Route: </span>
+                      {route.via}
+                    </p>
                   </div>
                 </Reveal>
               ))}
             </ul>
 
             <Reveal delay={300} className="mt-8 space-y-6">
+              <div>
+                <h3 className="font-display text-xl text-cream">Alternative Routes</h3>
+                <p className="mt-3 text-sm leading-relaxed text-cream-dim">
+                  You can also reach {ALTERNATIVE_ROUTES.destination} via:
+                </p>
+                <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-celadon">
+                  {ALTERNATIVE_ROUTES.via.map((place) => (
+                    <li key={place}>{place}</li>
+                  ))}
+                </ul>
+              </div>
               <p className="text-sm leading-relaxed text-cream-dim">
-                The last stretch climbs narrow hill roads through Kurseong and
-                Latpanchar. The road is scenic but narrow, so plan to arrive
-                before dark. We arrange pick-up and drop-off from Bagdogra
-                Airport, NJP Station, Siliguri, or any location by road, plus
-                local sightseeing and vehicle hire for your whole stay.
+                We arrange pick-up and drop-off from Bagdogra Airport, NJP Station, Siliguri, or any
+                location by road, plus local sightseeing and vehicle hire for your whole stay.
               </p>
 
               <div className="rounded-xl border keyline bg-ink-soft px-5 py-5 sm:px-6">
                 <p className="text-xs uppercase tracking-[0.2em] text-cream-dim">
                   Transport bookings
                 </p>
-                <p className="font-display mt-2 text-lg text-cream">
-                  {transport.name}
-                </p>
+                <p className="font-display mt-2 text-lg text-cream">{transport.name}</p>
                 <div className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-t keyline pt-4">
                   {transport.phones.map((phone) => (
                     <a
@@ -101,5 +97,5 @@ export default function GettingHere({ transport }: GettingHereProps) {
         </div>
       </div>
     </section>
-  );
+  )
 }

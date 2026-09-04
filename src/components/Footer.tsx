@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import AnimatedTitle from "@/components/AnimatedTitle";
+import FooterWeather from "@/components/FooterWeather";
 import Reveal from "@/components/Reveal";
 import { Star } from "@/components/icons";
 import { GOOGLE_REVIEWS } from "@/lib/site";
@@ -108,14 +108,7 @@ export default function Footer({ settings }: FooterProps) {
             Plan your visit
           </p>
         </Reveal>
-        <AnimatedTitle
-          as="h2"
-          className="font-display mt-5 max-w-4xl text-5xl leading-[1.02] tracking-tight text-cream sm:text-7xl"
-        >
-          The sun rises at six.
-          <br />
-          <em className="text-celadon">Be here at five-thirty.</em>
-        </AnimatedTitle>
+        <FooterWeather />
 
         <div className="mt-14 grid gap-10 border-t keyline pt-10 sm:mt-20 md:grid-cols-3">
           <Reveal>
@@ -181,7 +174,7 @@ export default function Footer({ settings }: FooterProps) {
         <div className="mt-16 flex flex-col items-start justify-between gap-3 border-t keyline pt-6 text-xs text-cream-dim sm:flex-row sm:items-center">
           <p>© {year} Sunrise Viewpoint Homestay, Aahaldara. All rights reserved.</p>
           <p className="font-numeric">
-            Alt. {settings.altitude} — first light 05:30 IST
+            Alt. {settings.altitude}
           </p>
         </div>
       </div>

@@ -4,13 +4,13 @@
  * The editable content — hero, rooms, experiences, gallery, tariff, and every
  * phone number, coordinate and address — now lives in Payload globals and is
  * edited at /admin. What remains here is structural or externally sourced:
- * the domain, the section navigation, route distances, the Google review
+ * the domain, the section navigation, travel directions, the Google review
  * summary, the curated testimonial showcase, and the map URLs. Provenance for
  * everything that moved lives in the matching file under src/seed/.
  *
  * Facts here are drawn from the homestay's own info sheet ("Sunrise Viewpoint
  * Homestay.md", provided by the client) plus verified third-party listings
- * (darjeeling-tourism.com for route distances) and a Google Maps reviews
+ * and client-supplied travel directions, plus a Google Maps reviews
  * export. Where a number couldn't be verified, it's written as an
  * approximation ("≈") rather than invented as fact.
  */
@@ -33,35 +33,29 @@ export const NAV_LINKS = [
 ];
 
 /**
- * Route distances verified against darjeeling-tourism.com's Sittong travel
- * guide (Aahaldara sits just off this same road, a few km before Sittong).
+ * Directions supplied by the client on 2026-09-04. Journey distances and
+ * durations were removed at their request. Destination spelling normalized.
  */
 export const ROUTES = [
   {
-    from: "NJP Railway Station",
-    via: "via Sevoke Road → Kalijhora → Latpanchar",
-    distance: "≈ 55 km",
-    time: "≈ 2.5 hrs",
-  },
-  {
     from: "Bagdogra Airport",
-    via: "via Rohini Road → Hill Cart Road → Kurseong → Bagora",
-    distance: "≈ 64 km",
-    time: "≈ 2 hrs 40 min",
+    via: "Bagdogra Airport → Sevoke Road → Kalijhora → Latpanchar → Ahal Dara (Sittong III)",
   },
   {
-    from: "Siliguri",
-    via: "via Sevoke Road → Kalijhora",
-    distance: "≈ 50 km",
-    time: "≈ 2.5 hrs",
+    from: "NJP Railway Station / Siliguri Bus Stand / Siliguri Railway Junction",
+    via: "NJP / Siliguri → Sevoke Road → Kalijhora → Latpanchar → Ahal Dara (Sittong III)",
   },
   {
     from: "Darjeeling Town",
-    via: "via Kurseong → Dilaram → Bagora",
-    distance: "≈ 35 km",
-    time: "≈ 1 hr 45 min",
+    via: "Darjeeling → Dilaram → Bagora → Ahal Dara (Sittong III)",
   },
 ];
+
+/** Alternative approaches supplied by the client on 2026-09-04. */
+export const ALTERNATIVE_ROUTES = {
+  destination: "Ahal Dara, Sittong III",
+  via: ["Kurseong", "Mungpoo"],
+};
 
 export const GOOGLE_REVIEWS = {
   url: "https://maps.app.goo.gl/AaRAEafSVtdj94YXA",

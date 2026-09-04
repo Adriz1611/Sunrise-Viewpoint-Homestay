@@ -42,8 +42,9 @@ An editorial, single-page marketing site built for a real client — not a templ
 
 ## 🚀 Getting started
 
-The app now runs on Payload CMS with a Postgres backend, so `dev` and `build` need
-Docker running.
+The app runs on Payload CMS with a Postgres backend. Start Docker Desktop before
+running `dev` or `build:local`. The local scripts use Node and work on Windows,
+macOS, and Linux without Bash. `build` uses the database configured in `DATABASE_URI`.
 
 ```bash
 npm install
